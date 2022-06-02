@@ -8,3 +8,8 @@ grom.bin
 jzintv.exe
 libwinpthread-1.dll
 SDL2.dll
+*.asm
+*.cfg
+*.bin
+*.rom
+

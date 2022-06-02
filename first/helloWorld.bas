@@ -1,0 +1,2 @@
+PRINT AT 0 COLOR 7,"Hello world!" 
+WHILE 1: WEND
