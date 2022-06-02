@@ -1,0 +1,11 @@
+
+ WHILE 1 
+ FOR c = 0 TO 50 
+ WAIT 
+ SOUND 0,,0 
+ NEXT c 
+ FOR c = 0 TO 10 
+ WAIT 
+ SOUND 0,254-c*5,10-c
+ NEXT c 
+ WEND 
