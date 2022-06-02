@@ -4,6 +4,7 @@
  c = 0 
  
 main_loop: 
+ '                 x          y        
  SPRITE 0, $0300 + c, $0100 + 8, $0807 + 5 * 8 
  WAIT ' Wait for a frame 
  WAIT ' Wait for a frame 
