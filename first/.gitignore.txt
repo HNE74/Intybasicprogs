@@ -1,0 +1,4 @@
+IntyBASIC.exe
+IntyColor.exe
+intybasic_epilogue.asm
+intybasic_prologue.asm
