@@ -1,3 +1,15 @@
+CLS 
+ PRINT AT 44 COLOR 7,"Smiling face" 
+ PRINT AT 202 COLOR 6,"Press any button" 
+ DO 
+ WAIT 
+ c = CONT1 
+ LOOP WHILE c 
+ DO 
+ WAIT 
+ c = CONT1 
+ LOOP WHILE c = 0 
+
 CLS ' Clears the screen 
  DEFINE 5,1,smiling_face' Define card as a smiling face 
  x = 84 
