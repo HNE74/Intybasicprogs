@@ -53,6 +53,10 @@
  '
 ball_loop:
  WAIT
+ if sound_counter > 0 then 
+	sound_counter=sound_counter-1
+	if sound_counter=0 then sound 2,1,0
+ end if
  
  ' draw paddles
  sprite 0, $0708+x1, $0208+y1, $0800+5*8+1
@@ -129,6 +133,9 @@ goto ball_loop
  ' Ball touched wall
  '
 ball: PROCEDURE
+ sound 2,500,48
+ sound 3,400,9
+ sound_counter=10
 END
  
  '
@@ -140,6 +147,11 @@ ball_out: PROCEDURE
  else
     score1=score1+1
  end if
+ gosub update_score
+ 
+ sound 2,330,48
+ sound 3,70,10
+ sound_counter=15
 END
 
  
@@ -177,6 +189,10 @@ rebound: PROCEDURE
  end if
  gosub get_angle
  if ball_speed <$40 then ball_speed=ball_speed+1  
+ 
+ sound 2,150,48
+ sound 3,300,9
+ sound_counter=5
 END
 
  ' 
