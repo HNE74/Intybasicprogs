@@ -45,12 +45,62 @@ start_game:
 restart_level:
 	CLS
 	SCREEN LEVEL1_CARDS
+	
 	FOR C=0 TO 6
 		SPRITE C, 0
 	NEXT C
 	SPRITE 7,MOB_LEFT+13*8+4, MOB_TOP+1*8,MF ' MONKEY FACE COLOR
 	
-	WHILE 1: WEND
+	' init player
+	player_x=16 
+	player_y=80
+	player_state=0
+	
+	'
+	' Loop for the game
+	'
+game_loop:
+	x=player_x
+	y=player_y
+	
+	' check adjust player horizontal position
+	if player_state<>2 and player_state<>6 then
+		gosub get_offset
+		player_offset=offset_y
+	else
+		offset_y=0
+		player_offset=0
+	end if
+	
+	' set player look by it's state
+	if player_state=0 then
+		sprite 0, mob_left+player_x, mob_top+player_y+offset_y, PA
+	elseif player_state=1 then 
+		sprite 0, mob_left+player_x, mob_top+player_y+offset_y, PB
+	elseif player_state=2 then 
+		sprite 0, mob_left+player_x, mob_top+player_y+offset_y, PC		
+	elseif player_state=4 then 
+		sprite 0, mob_left+player_x, mob_top+mirror_x+player_y+offset_y, PA
+	elseif player_state=5 then 
+		sprite 0, mob_left+player_x, mob_top+mirror_x+player_y+offset_y, PB
+	elseif player_state=6 then 
+		sprite 0, mob_left+player_x, mob_top+mirror_x+player_y+offset_y, PC	
+	end if
+	WAIT
+	
+	c=cont
+    d=c and $e0
+	if (d=$80) + (d=$40) + (d=$20) then
+		' keypad pressed
+	elseif (d=$60) + (d=$a0) + (d=$c0) then
+		' side button pressed
+	else
+		d=controller_direction(c and $1F)
+		
+		' TODO: Continue page 48
+
+		
+	
 	
 	'
 	' Bitmaps for the game (first section)
