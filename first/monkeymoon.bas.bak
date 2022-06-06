@@ -96,8 +96,45 @@ game_loop:
 		' side button pressed
 	else
 		d=controller_direction(c and $1F)
+	
+		'print at 20 color 7, <>frame		
+		if d=1 then ' going up
+			if player_y%16=0 then ' over flor
+				x=(player_x + 4)/8
+				y=player_y/8
+				if #backtab(y*20+x)=LA then ' start climb
+					player_y=player_y-1
+					player_state=2
+				end if
+			elseif (frame and 1) = 0 then ' over ladder
+				player_y=player_y-1	' go up
+				if (frame and 3) = 0 then ' animate player
+					player_state=player_state xor 4			
+				end if
+				if player_y%16=4 then	' end of ladder reached
+					player_y=player_y-4
+					player_state=0
+				end if
+			end if
+		end if
 		
-		if d=2 then ' Going right
+		if d=3 then ' going down
+			if player_y%16=0 then ' over flor
+				x=(player_x + 4)/8
+				y=player_y/8+2
+				if #backtab(y*20+x)=LA then ' start descend
+					player_y=player_y+5
+					player_state=2
+				end if
+			elseif (frame and 1) = 0 then ' over ladder
+				player_y=player_y+1 ' go down
+				if (frame and 3) = 0 then ' animate player
+					player_state=player_state xor 4
+				end if
+			end if
+		end if		
+		
+		if d=2 then ' going right
 			if player_y%16 = 0 then ' player aligned with girder
 				platform = player_y/8/2 ' calculate platform index
 				if player_x<max_platform(platform) then
@@ -112,7 +149,7 @@ game_loop:
 			end if
 		end if
 		
-		if d=2 then ' Going left
+		if d=4 then ' going left
 			if player_y%16 = 0 then ' player aligned with girder
 				platform = player_y/8/2 ' calculate platform index
 				if player_x>min_platform(platform) then
@@ -129,7 +166,6 @@ game_loop:
 	end if
 	
 	goto game_loop
-	
 	
 	'
 	' Min and max platform MOB coordinates
@@ -320,7 +356,6 @@ controller_direction:
 	DATA 4,4,0,0,1,0,0,0 
 	DATA 0,3,2,0,0,0,0,0 
 	DATA 4,0,0,0,1,0,0,0 
-	
 	
 	'
 	' Bitmaps for the game (second section)
