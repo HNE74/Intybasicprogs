@@ -51,10 +51,10 @@ restart_level:
 	NEXT C
 	SPRITE 7,MOB_LEFT+13*8+4, MOB_TOP+1*8,MF ' MONKEY FACE COLOR
 	
-	' init player
-	player_x=16 
-	player_y=80
-	player_state=0
+	' INIT PLAYER
+	PLAYER_X=16 
+	PLAYER_Y=80
+	PLAYER_STATE=0
 	
 	'
 	' Loop for the game
@@ -97,10 +97,57 @@ game_loop:
 	else
 		d=controller_direction(c and $1F)
 		
-		' TODO: Continue page 48
-
+		if d=2 then ' Going right
+			if player_y%16 = 0 then ' player aligned with girder
+				platform = player_y/8/2 ' calculate platform index
+				if player_x<max_platform(platform) then
+					sound_effect=1:sound_state=0
+					player_x=player_x+1
+					if player_state<>0 and player_state<>1 then
+						player_state=0
+					elseif (frame and 3)=0 then
+						player_state=player_state xor 1
+					end if
+				end if
+			end if
+		end if
 		
+		if d=4 then ' Going left
+			if player_y%16 = 0 then ' player aligned with girder
+				platform = player_y/8/2 ' calculate platform index
+				if player_x>min_platform(platform) then
+					sound_effect=1:sound_state=0
+					player_x=player_x-1
+					if player_state<>4 and player_state<>5 then
+						player_state=4
+					elseif (frame and 3)=0 then
+						player_state=player_state xor 1
+					end if
+				end if
+			end if
+		end if
+	end if
 	
+	goto game_loop
+	
+	
+	'
+	' Min and max platform MOB coordinates
+	'
+min_platform: 
+	DATA 0 
+	DATA 28 
+	DATA 20 
+	DATA 28 
+	DATA 20 
+	DATA 12 
+max_platform: 
+	DATA 0 
+	DATA 96 
+	DATA 123 
+	DATA 131 
+	DATA 131 
+	DATA 139 	
 	
 	'
 	' Bitmaps for the game (first section)
@@ -249,6 +296,31 @@ game_bitmaps_0:
 	BITMAP "..X..X.."
 	BITMAP "..X..XX."
 	BITMAP ".XX....." 
+	
+	'
+	' Calculate player vertical offset due to girder type
+	'
+get_offset: PROCEDURE
+	position = (y/8)*20+((x+4)/8)
+	#c=#backtab(position+20)
+	
+	if #c=GA then offset_y=0:return
+	if #c=GB then offset_y=1:return
+	if #c=GC then offset_y=2:return
+	if #c=GD then offset_y=3:return
+	if #c=GE then offset_y=4:return
+	offset_y=0
+END
+
+	'
+	' Controller direction -> 4 way direction conversion table
+	'
+controller_direction: 
+	DATA 0,3,2,3,1,0,2,0 
+	DATA 4,4,0,0,1,0,0,0 
+	DATA 0,3,2,0,0,0,0,0 
+	DATA 4,0,0,0,1,0,0,0 
+	
 	
 	'
 	' Bitmaps for the game (second section)
