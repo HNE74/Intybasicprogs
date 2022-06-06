@@ -4,6 +4,14 @@
 	' Creation date: Jun/11/2018.
 	'
 	
+	unsigned #score,#bonus
+	signed offset_y
+	
+	dim rock_x(6) ' x position rocks
+	dim rock_y(6) ' y position rocks
+	dim rock_s(6) ' state of rocks
+	
+	
 	' Game constants
 	CONST MOB_LEFT = $0308 ' Enabled + interact + hidden border
 	CONST MOB_TOP = $0108 ' Normal size + hidden border
@@ -42,6 +50,14 @@
 	' Game
 start_game:
 
+	#score=0
+	level=0
+	lives=2
+	
+next_level:
+	level=level+1
+	if level>5 then #bonus=50 else #bonus=110-level*10
+
 restart_level:
 	CLS
 	SCREEN LEVEL1_CARDS
@@ -56,10 +72,35 @@ restart_level:
 	PLAYER_Y=80
 	PLAYER_STATE=0
 	
+	' INIT ROCKS
+	FOR C=0 TO 5
+		ROCK_Y(C)=0
+	NEXT C
+	ROCK_TIME=RAND(30)+10
+	
 	'
 	' Loop for the game
 	'
 game_loop:
+
+	' show rocks
+	for c=0 to 5
+		if rock_y(c) then ' check rock active
+			x=rock_x(c)
+			y=rock_y(c)
+			if rock_s(c)<2 then
+				gosub get_offset
+				' check player jumps rock
+				if x=player_x and y=player_y then #score=#score+10 
+			else
+				offset_y=0
+			end if
+			sprite c+1,mob_left+rock_x(c), mob_top+rock_y(c)+offset_y+rock_mirror((frame/4) and 3), rock_animation((frame/4) and 1)
+		else ' disable rock
+			sprite c+1,0
+		end if		
+	next c
+
 	x=player_x
 	y=player_y
 	
@@ -88,6 +129,68 @@ game_loop:
 	end if
 	WAIT
 	
+	' decrease bonus
+	if frame%256=0 then
+		if #bonus>0 then #bonus=#bonus-10
+	end if
+	
+	' print game state
+	print at 0 color 7, <5>#score,"0"
+	print at 12, <.2>level
+	print at 16 color 7, <.3>bonus,"0"
+		
+	' check if player has won
+	if player_y=0 then goto level_won
+	
+	' add rock
+	rock_time=rock_time-1
+	if rock_time=0 then
+		if level>10 then c=60 else c=60+5(10-level)
+		rock_time=c+random(45) ' determine when next rock appears
+		for c=0 to 5 ' new rock appears
+			if rock_y(c)=0 then
+				rock_x(c)=96
+				rock_y(c)=16
+				rock_s(c)=0
+				exit for
+			end if
+		next c
+	end if
+	
+	' move rocks
+	for c=0 to 5
+		if rock_y(c) then
+			if rock_s(c) = 0 then ' rock goes left
+				platform=rock_y(c)/16
+				if rock_x(c)>min_platform(platform) then
+					rock_x(c)=rock_x(c)-1 
+				else
+					rock_y(c)=rock_y(c)+4 ' rock goes down
+					rock_x(c)=rock_x(c)-4
+					rock_s(c)=3
+					print at 0,"e"
+				end if									
+			elseif rock_s(c) >= 1 then ' rock goes right
+				platform=rock_y(c)/16
+				if rock_x(c) < max_platform(platform) then
+					rock_x(c)=rock_x(c)+1 
+				else
+					rock_y(c)=rock_y(c)+4 ' rock goes down
+					rock_x(c)=rock_x(c)+4
+					rock_s(c)=2
+				end if
+			elseif rock_s(c) >= 2 then ' falling rock
+				rock_y(c)=rock_y(c)+1
+				if rock_y(c)>=96 then 
+					rock_y(c)=0 ' rock left screen
+				elseif rock_y(c)%16=0 then' rock has hit platform
+					rock_s(c)=rock_s(c)%2 ' rock goes left or right again
+				end if
+			end if			
+		end if
+	next c
+
+		
 	c=cont
     d=c and $e0
 	if (d=$80) + (d=$40) + (d=$20) then
@@ -111,7 +214,7 @@ game_loop:
 				if (frame and 3) = 0 then ' animate player
 					player_state=player_state xor 4			
 				end if
-				if player_y%16=4 then	' end of ladder reached
+				if player_y%16=4 then	'top end of ladder reached
 					player_y=player_y-4
 					player_state=0
 				end if
@@ -168,6 +271,22 @@ game_loop:
 	goto game_loop
 	
 	'
+	' Player has won the level
+	'
+level_won:
+	#score=#score+#bonus
+	print at 0 color 7,<5>#score,"0"
+	for c=1 to 6
+		sprite c,0
+	next c
+	
+	sound_effect=4:sound_state=0
+	for c=0 to 60
+		wait
+	next c
+	goto next_level
+	
+	'
 	' Min and max platform MOB coordinates
 	'
 min_platform: 
@@ -184,6 +303,19 @@ max_platform:
 	DATA 131 
 	DATA 131 
 	DATA 139 	
+	
+	'
+	' Rock animtion data
+	'
+rock_animation:
+	data RA
+	data RB
+
+rock_mirror:
+	data $0000
+	data $0000
+	data MIRROR_X
+	data MIRROR_Y
 	
 	'
 	' Bitmaps for the game (first section)
