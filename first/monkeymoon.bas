@@ -59,24 +59,25 @@ next_level:
 	if level>5 then #bonus=50 else #bonus=110-level*10
 
 restart_level:
-	CLS
-	SCREEN LEVEL1_CARDS
+	cls
+	screen level1_cards
 	
-	FOR C=0 TO 6
-		SPRITE C, 0
-	NEXT C
-	SPRITE 7,MOB_LEFT+13*8+4, MOB_TOP+1*8,MF ' MONKEY FACE COLOR
+	for c=0 to 6
+		sprite c, 0
+	next c
+	sprite 7,mob_left+13*8+4, mob_top+1*8,mf ' monkey face color
 	
-	' INIT PLAYER
-	PLAYER_X=16 
-	PLAYER_Y=80
-	PLAYER_STATE=0
+	' init player
+	player_x=16 
+	player_y=80
+	player_state=0
+	player_jumping=0
 	
-	' INIT ROCKS
-	FOR C=0 TO 5
-		ROCK_Y(C)=0
-	NEXT C
-	ROCK_TIME=RAND(30)+10
+	' init rocks
+	for c=0 to 5
+		rock_y(c)=0
+	next c
+	rock_time=rand(30)+10
 	
 	'
 	' Loop for the game
@@ -104,14 +105,20 @@ game_loop:
 	x=player_x
 	y=player_y
 	
-	' check adjust player horizontal position
-	if player_state<>2 and player_state<>6 then
+	' adjust player y position by offset
+	if player_jumping then
+		offset_y = jump_y(player_jumping-1)+player_offset
+	else if player_state<>2 and player_state<>6 then
 		gosub get_offset
 		player_offset=offset_y
 	else
 		offset_y=0
 		player_offset=0
 	end if
+	
+	' player jumps
+	if player_jumping then
+		offset_y = jump_y(player_jumping-1)+player_offset
 	
 	' set player look by it's state
 	if player_state=0 then
@@ -139,8 +146,20 @@ game_loop:
 	print at 12, <.2>level
 	print at 16 color 7, <.3>bonus,"0"
 		
+	' check player collision with stone
+	if col0 and $007e then goto player_defeat
+		
 	' check if player has won
 	if player_y=0 then goto level_won
+	
+	' player jumps
+	if player_jumping then
+		if player_jumping=24 then
+			player_jumping=0
+		else
+			player_jumping+1
+		end if
+	end if
 	
 	' add rock
 	rock_time=rock_time-1
@@ -197,6 +216,10 @@ game_loop:
 		' keypad pressed
 	elseif (d=$60) + (d=$a0) + (d=$c0) then
 		' side button pressed
+		if player_jumping=0 then
+			player_jumping=1
+			sound_effect=2:sound_state=0
+		end if
 	else
 		d=controller_direction(c and $1F)
 	
@@ -287,6 +310,50 @@ level_won:
 	goto next_level
 	
 	'
+	' Player has been defeated
+	'
+player_defeat:
+	sound_effect=3:sound_state=0
+	for c=0 to 60 ' animate player defeated
+		wait
+		d=(frame/4) and 3
+		if d=0 then
+			sprite 0, mob_left+player_x, mob_top+player_y+offset_y, PA
+		elseif d=1 then
+			sprite 0, mob_left+player_x, mob_top+player_y+offset_y, PD
+		elseif d=2 then
+			sprite 0, mob_left+player_x, mob_top+mirror_x+mirror_y+player_y+offset_y, PA
+		else
+			sprite 0, mob_left+player_x, mob_top+mirror_x+mirror_y+player_y+offset_y, PD
+		end if
+	next c
+	
+	' respawn player
+	if lives<>0 then
+		lives=lives-1
+		goto restart_level
+	end if
+	
+	' game over
+	for c=0 to 6
+		sprite c,0
+	next c0
+	print at 125 color 6, "GAME OVER"
+	for c=0 to 60
+		wait
+	next c
+	
+	' wait for restart of game
+	do 
+		c=cont
+	loop while c
+		do 
+		c=cont
+	loop while c=0
+	goto start_game
+		
+	
+	'
 	' Min and max platform MOB coordinates
 	'
 min_platform: 
@@ -316,6 +383,36 @@ rock_mirror:
 	data $0000
 	data MIRROR_X
 	data MIRROR_Y
+	
+	'
+	' Player jump y offsets
+	'
+jump_y: 
+	DATA -2 
+	DATA -4 
+	DATA -5 
+	DATA -6 
+	DATA -7 
+	DATA -8 
+	DATA -9 
+	DATA -9 
+	DATA -10 
+	DATA -10 
+	DATA -11 
+	DATA -11 
+	DATA -11 
+	DATA -11 
+	DATA -10 
+	DATA -10 
+	DATA -9 
+	DATA -9 
+	DATA -8 
+	DATA -7 
+	DATA -6 
+	DATA -5 
+	DATA -4 
+	DATA -2 
+
 	
 	'
 	' Bitmaps for the game (first section)
