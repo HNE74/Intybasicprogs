@@ -140,7 +140,7 @@ game_loop:
 	' print game state
 	print at 0 color 7, <5>#score,"0"
 	print at 12, <.2>level
-	print at 16 color 7, <.3>bonus,"0"
+	print at 16 color 7, <.3>#bonus,"0"
 		
 	' check player collision with stone
 	if col0 and $007e then goto player_defeat
