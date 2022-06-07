@@ -108,17 +108,13 @@ game_loop:
 	' adjust player y position by offset
 	if player_jumping then
 		offset_y = jump_y(player_jumping-1)+player_offset
-	else if player_state<>2 and player_state<>6 then
+	elseif player_state<>2 and player_state<>6 then
 		gosub get_offset
 		player_offset=offset_y
 	else
 		offset_y=0
 		player_offset=0
 	end if
-	
-	' player jumps
-	if player_jumping then
-		offset_y = jump_y(player_jumping-1)+player_offset
 	
 	' set player look by it's state
 	if player_state=0 then
@@ -157,14 +153,14 @@ game_loop:
 		if player_jumping=24 then
 			player_jumping=0
 		else
-			player_jumping+1
+			player_jumping=player_jumping+1
 		end if
 	end if
 	
 	' add rock
 	rock_time=rock_time-1
 	if rock_time=0 then
-		if level>10 then c=60 else c=60+5(10-level)
+		if level>10 then c=60 else c=100+5*(10-level)
 		rock_time=c+random(45) ' determine when next rock appears
 		for c=0 to 5 ' new rock appears
 			if rock_y(c)=0 then
@@ -337,7 +333,7 @@ player_defeat:
 	' game over
 	for c=0 to 6
 		sprite c,0
-	next c0
+	next c
 	print at 125 color 6, "GAME OVER"
 	for c=0 to 60
 		wait
@@ -352,7 +348,6 @@ player_defeat:
 	loop while c=0
 	goto start_game
 		
-	
 	'
 	' Min and max platform MOB coordinates
 	'
@@ -413,7 +408,6 @@ jump_y:
 	DATA -4 
 	DATA -2 
 
-	
 	'
 	' Bitmaps for the game (first section)
 	'
