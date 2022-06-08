@@ -47,6 +47,9 @@
 	DEFINE 16,1,game_bitmaps_1
 	WAIT
 	
+	' Init sound effect handler to be called each frame
+	on frame gosub play_effects
+	
 	' Game
 start_game:
 
@@ -347,6 +350,41 @@ player_defeat:
 		c=cont
 	loop while c=0
 	goto start_game
+	
+ '
+ ' Sound effects
+ '
+play_effects: PROCEDURE
+	on sound_effect gosub sound_none, sound_walk, sound_jump, sound_death, sound_victory
+END
+
+sound_none: PROCEDURE
+	sound 0,,0
+END
+
+sound_walk: PROCEDURE
+	if (frame and 15) < 2 then sound 0,200,10 else sound 0,,0
+	sound_state=sound_state+1
+	if sound_state=3 then sound_effect=0
+END
+
+sound_jump: PROCEDURE
+	sound 0,200-sound_state*10,10
+	sound_state=sound_state+1
+	if sound_state=10 then sound_effect=0
+END
+
+sound_death: PROCEDURE
+	sound 0,1000+(sound_state/4%2)*500,10
+	sound_state=sound_state+1
+	if sound_state=30 then sound_effect=0
+END
+
+sound_victory: PROCEDURE
+	sound 0,150-sound_state*5,10
+	sound_state=sound_state+1
+	if sound_state=10 then sound_effect=0
+END	
 		
 	'
 	' Min and max platform MOB coordinates
