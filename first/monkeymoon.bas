@@ -39,19 +39,34 @@
 	CONST PD = $0807 + 16 * 8	
 	
 	' Init graphics
-	CLS
-	MODE 0,0,0,0,0
-	WAIT
-	DEFINE 0,16,game_bitmaps_0
-	WAIT
-	DEFINE 16,1,game_bitmaps_1
-	WAIT
+	cls
+	mode 0,0,0,0,0
+	wait
+	define 0,16,game_bitmaps_0
+	wait
+	define 16,1,game_bitmaps_1
+	wait
 	
 	' Init sound effect handler to be called each frame
 	on frame gosub play_effects
 	
 	' Game
 start_game:
+
+	cls
+	print at 46 color 7, "Monkey"
+	print at 70, "Moon"
+	print at 129, MA,MC
+	print at 149, MB,MD
+	sprite 7, mob_left+9*8+4, mob_top+6*8, MF
+	print at 202 color 6, "Press any button"
+	
+	do 
+		c=cont
+	loop while c
+		do 
+		c=cont
+	loop while c=0	
 
 	#score=0
 	level=0
