@@ -43,6 +43,17 @@ start_game:
 		#backtab(stars(c))=STAR
 	next c
 
+	#score=0
+	lives=2
+	
+	'
+	' Init enemies
+	'
+	for c=0 to 5
+		ex(c)=0
+	next c
+	next_wave=100+random(40)
+
 '
 ' Restart game after loosing live
 '
@@ -61,13 +72,38 @@ game_loop:
 		sprite 0, mob_left+player_x, mob_top+player_y, sprite_player
 	end if
 	
-	if shot_y=0 then  ' no shot
+	if shot_y=0 then ' no shot
 		sprite 1, 0
 	elseif shot_exp<> then ' render shot explosion
 		sprite 1, mob_left+shot_x, mob_top+shot_y, sprite_explosion
 	else ' render shot
 		sprite 1, mob_left+shot_x, mob_top+shot_y, sprite_shot1
 	end if
+		
+	' 
+	' manage enemie visibility
+	'
+	something=0
+	for c=0 to 2
+		if ex(c) then ' render enemy
+			sprite 2+c, mob_left+ex(c), mob_top+(ey(c) and $7f), sprite_frame(ef(c))
+			something=1
+		else ' no enemy
+			sprite 2+c, 0
+		end if
+	next c
+	
+	' 
+	' manage enemie shot visibility
+	'	
+	for c=3 to 5
+		if ex(c) then
+			sprite 2+c, mob_left+ex(c), mob_top+(ey(c) and $7f), sprite_frame(9)
+			something=1
+		else
+			sprite 2+c, 0
+		end if
+	next c	
 		
 	'
 	' synchronize game
@@ -98,7 +134,22 @@ game_loop:
 	next c
 	
 	'
-	' Shot management
+	' enemy wave management
+	'
+	if next_wave then
+		if something=0 then ' countdown to next wave
+			next_wave=next_wave-1
+		else
+			on wave gosub move_wave_0
+		end if
+	else ' init countdown to next wave 
+		next_wave=20+random(20)
+		wave=0
+		on wave gosub start_wave_0_1
+	end if
+		
+	'
+	' player shot management
 	'	
 	if shot_y<>0 then ' check shot
 		if shot_exp then ' shot has exploded
@@ -114,7 +165,7 @@ game_loop:
 	end if
 	
 	'
-	' Player management
+	' player management
 	'
 	c = cont
 	d = c and $e0
@@ -140,6 +191,88 @@ game_loop:
 	end if
 				
 	goto game_loop
+	
+'
+' start waves 0 and 1
+'
+start_wave_0_1:	procedure
+	'???
+	c=player_x 
+	if<24 then c=24
+	if c>144 then c=144
+	
+	' Init enemies
+	x=random(32)+player_x-16	
+	ex(0)=x-16:ey(0)=-16:ef(0)=4
+	ex(1)=x:ey(1)=-8:ef(1)=4
+	ex(2)=x+16:ey(2)=-16:ef(2)=4
+end
+
+'
+' wave 0 enemy ship movement
+'
+move_wave_0: procedure
+	wave_state=wave_state+1
+	
+	' wave end
+	if wave_state=120 then
+		ex(0)=0:ex(1)=0:ex(2)=0
+		return
+	end if
+	
+	' horizontal movement 
+	if wave_state>=32 and wave_state<=39 then
+		if ex(0) then
+			ef(0)=5:ex(0)=ex(0)-1
+		end if
+		if ex(1) then
+			ef(1)=5:ex(1)=ex(1)-1
+		end if	
+		if ex(2) then
+			ef(2)=5:ex(2)=ex(2)-1
+		end if	
+	elseif wave_state=40 then
+		ef(0)=4:ef(1)=4:ef(2)=4
+	elseif wave_state>=64 and wave_state<=71 then
+		if ex(0) then
+			ef(0)=3:ex(0)=ex(0)+1
+		end if
+		if ex(1) then
+			ef(1)=3:ex(1)=ex(1)+1
+		end if	
+		if ex(2) then
+			ef(2)=3:ex(2)=ex(2)+1
+		end if	
+	elseif wave_state=72 then
+		ef(0)=4:ef(1)=4:ef(2)=4
+	end if
+	
+	' vertical movement
+	if ex(0) then 
+		ey(0)=ey(0)+1
+	end if
+	if ex(1) then 
+		ey(1)=ey(1)+1
+	end if
+	if ex(2) then 
+		ey(2)=ey(2)+1
+	end if	
+end
+		
+'
+' enemy sprite frame definition
+'
+sprite_frame:
+	data sprite_ship_1
+	data sprite_ship_2
+	data sprite_ship_3
+	data sprite_ship_4
+	data sprite_ship_5
+	data sprite_ship_6
+	data sprite_ship_7
+	data sprite_ship_8
+	data sprite_explosion
+	data sprite_shot2
 	
 '
 ' controller direction translation data
