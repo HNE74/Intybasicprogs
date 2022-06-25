@@ -185,6 +185,20 @@ game_loop:
 	next c
 	
 	'
+	' print score and number of lives
+	'
+	print at 0 color 3,<5>score,"0"
+	#backtab(19)=(lives+$10)*8+3
+	
+	'
+	' player destroyed countdown
+	'
+	if crash then
+		crash=crash-1
+		if crash=0 then goto game_over
+	end if
+	
+	'
 	' enemy wave management
 	'
 	if next_wave then
@@ -242,6 +256,36 @@ game_loop:
 	end if
 				
 	goto game_loop
+	
+'
+' player hit and game over
+'
+game_over:
+	' reset all mobs
+	for c=0 to 7
+		sprite c,0
+	next c
+	
+	if lives<>0 then ' restart game
+		lives=lives-1
+		goto restart_game
+	end if
+	
+	' no lives left -> game over
+	print at 85 color 6, "GAME  OVER"
+	for c=0 to 60
+		wait
+	next c
+	
+	' wait for new game
+	do 
+		c=cont
+	loop while c
+	do 
+		c=cont
+	loop while c=0	
+	
+	goto start_game
 	
 '
 ' start waves 0 and 1
