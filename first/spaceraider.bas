@@ -73,6 +73,7 @@ restart_game:
 	player_x=84
 	player_y=88
 	shot_y=0
+	difficulty=250
 
 '
 ' Main game loop
@@ -95,7 +96,7 @@ game_loop:
 			ey(c)=ey(c)+2
 			if ey(c)>=104 then ex(c)=0
 		elseif ex(c-3) ' spawn shots
-			if random(200)=1 then
+			if random(difficulty)=1 then
 				ex(c)=ex(c-3)
 				ey(c)=ey(c-3)
 				sound_shot2=1
@@ -225,6 +226,7 @@ game_loop:
 	else ' init countdown to next wave 
 		next_wave=20+random(20)
 		wave=random(4)
+		if difficulty>=10 then difficulty=difficulty-20
 		on wave gosub start_wave_0_1, start_wave_0_1, start_wave_2, start_wave_3
 	end if
 		
