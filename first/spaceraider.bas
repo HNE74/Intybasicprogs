@@ -205,12 +205,12 @@ game_loop:
 		if something=0 then ' countdown to next wave
 			next_wave=next_wave-1
 		else
-			on wave gosub move_wave_0, move_wave_1, move_wave_2
+			on wave gosub move_wave_0, move_wave_1, move_wave_2, move_wave_3
 		end if
 	else ' init countdown to next wave 
 		next_wave=20+random(20)
-		wave=random(2)
-		on wave gosub start_wave_0_1, start_wave_0_1, start_wave_2
+		wave=random(4)
+		on wave gosub start_wave_0_1, start_wave_0_1, start_wave_2, start_wave_3
 	end if
 		
 	'
@@ -291,31 +291,43 @@ game_over:
 ' start waves 0 and 1
 '
 start_wave_0_1:	procedure
-	???
-	c=player_x 
-	if<24 then c=24
-	if c>144 then c=144
+	'???
+	'c=player_x 
+	'if<24 then c=24
+	'if c>144 then c=144
 	
 	' Init enemies
 	x=random(32)+player_x-16	
 	ex(0)=x-16:ey(0)=-16:ef(0)=4
 	ex(1)=x:ey(1)=-8:ef(1)=4
 	ex(2)=x+16:ey(2)=-16:ef(2)=4
+	wave_state=0
 end
 
 '
 ' start wave 2
 '
-start_wave_2:	procedure
+start_wave_2: procedure
 	'???
-	c=player_x 
-	if<24 then c=24
-	if c>144 then c=144
+	'c=player_x 
+	'if<24 then c=24
+	'if c>144 then c=144
 	
 	' Init enemies
 	x=random(32)+player_x-16	
 	ex(0)=x-8:ey(0)=-8:ef(0)=4
 	ex(1)=x+8:ey(1)=-8:ef(1)=4
+	wave_state=0
+end
+
+'
+' start_wave_3: 
+'
+start_wave_3: procedure
+	' Init enemies
+	ex(0)=1:ey(0)=16:ef(0)=2
+	ex(1)=168:ey(1)=16:ef(1)=6
+	wave_state=0
 end
 
 '
@@ -418,6 +430,9 @@ move_wave_1: procedure
 	end if	
 end
 
+'
+' wave 2 enemy ship movement
+'
 move_wave_2: procedure
 	wave_state=wave_state+1
 	
@@ -464,6 +479,46 @@ move_wave_2: procedure
 	end if
 end
 
+'
+' wave 3 enemy ship movement
+'
+move_wave_3: procedure
+	wave_state=wave_state+1
+	
+	if wave_state=184 then
+		ex(0)=0:ex(1)=0:ex(2)=0
+		return
+	end if
+	
+	if wave_state<72 then
+		if ex(0) then
+			ex(0)=ex(0)+1
+		end if
+		if ex(1) then
+			ex(1)=ex(1)-1
+		end if
+	elseif wave_state<80 then
+		if ex(0) then
+			ex(0)=ex(0)+1
+			ey(0)=ey(0)+1
+			ef(0)=3
+		end if
+		if ex(1) then
+			ex(1)=ex(1)-1
+			ey(1)=ey(1)+1
+			ef(1)=5
+		end if		
+	else
+		if ex(0) then
+			ey(0)=ey(0)+1
+			ef(0)=4
+		end if
+		if ex(1) then
+			ey(1)=ey(1)+1
+			ef(1)=4
+		end if		
+	end if	
+end
 		
 '
 ' enemy sprite frame definition
