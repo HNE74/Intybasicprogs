@@ -1,4 +1,5 @@
-' 
+on frame gosub play_effects
+ ' 
  ' Space Raider 
  ' by Oscar Toledo G. 
  ' modified by Noltisoft
@@ -32,8 +33,19 @@ WAIT
 DEFINE 0,12,game_bitmaps 
 WAIT 
 
-start_game: 
+start_game:
 	cls
+	print at 44 color 7, "SPACE RAIDER"
+	print at 182 color 6, "PRESS ANY BUTTON"
+	
+	' wait for game start
+	do 
+		c=cont
+	loop while c
+	do 
+		c=cont
+	loop while c=0		
+	cls	
 	
 	'
 	' Init star background
@@ -83,9 +95,10 @@ game_loop:
 			ey(c)=ey(c)+2
 			if ey(c)>=104 then ex(c)=0
 		elseif ex(c-3) ' spawn shots
-			if random(2) then
+			if random(200)=1 then
 				ex(c)=ex(c-3)
 				ey(c)=ey(c-3)
+				sound_shot2=1
 			end if
 		end if
 	next c
@@ -136,6 +149,7 @@ game_loop:
 	'
 	if col0 and $00fc then
 		if crash=0 then crash=60
+		sound_explosion1=1
 	end if
 	
 	'
@@ -155,6 +169,7 @@ game_loop:
 				shot_exp=4
 				ex(c)=0
 				#score=#score+1
+				sound_explosion2=1
 			end if
 		elseif c<6 then ' bullet destroyed
 			ex(c)=0
@@ -222,7 +237,7 @@ game_loop:
 			if shot_exp=0 then shot_y=0 ' no shot
 		else
 			if shot_y>2 then
-				shot_y=shot_y-3
+				shot_y=shot_y-4
 			else
 				shot_y=0
 			end if
@@ -242,6 +257,7 @@ game_loop:
 				shot_x=player_x
 				shot_y=player_y
 				shot_exp=0
+				sound_shot1=1
 			end if
 		end if
 		
@@ -518,6 +534,39 @@ move_wave_3: procedure
 			ef(1)=4
 		end if		
 	end if	
+end
+
+'
+' play sound effects
+'
+play_effects: procedure
+	if sound_explosion1 then
+		sound 0, 2000, 15-sound_explosion1/4
+		sound 4, sound_explosion1/2+4,$30
+		sound_explosion1=sound_explosion1+1
+		if sound_explosion1=50 then sound_explosion1=0
+	elseif sound_explosion2 then
+		sound 0, 2000, 15-sound_explosion2/2
+		sound 4, sound_explosion2/2+12,$30
+		sound_explosion2=sound_explosion2+1
+		if sound_explosion2=20 then sound_explosion2=0
+	elseif sound_shot1 then
+		sound 0,100-sound_shot1*5,12
+		sound 4,,$38
+		sound_shot1=sound_shot1+1
+		if sound_shot1=11 then sound_shot1=0
+	else
+		sound 0,,0
+		sound 4,,$38
+	end if
+	
+	if sound_shot2 then
+		sound 1,50+sound_shot2*7,12
+		sound_shot2=sound_shot2+1
+		if sound_shot2=6 then sound_shot2=0
+	else
+		sound 1,,0
+	end if
 end
 		
 '
