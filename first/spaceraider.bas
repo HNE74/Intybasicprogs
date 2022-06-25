@@ -66,12 +66,33 @@ restart_game:
 ' Main game loop
 '	
 game_loop:
+	'
+	' manage player visibility
+	'
 	if crash then ' render player explosion
 		sprite 0, mob_left+player_x, mob_top+player_y, sprite_explosion+(rand%8)
 	else ' render player
 		sprite 0, mob_left+player_x, mob_top+player_y, sprite_player
 	end if
 	
+	'
+	' manage enemy shots
+	'
+	for c=3 to 5
+		if ex(c) then ' move shots down
+			ey(c)=ey(c)+2
+			if ey(c)>=104 then ex(c)=0
+		elseif ex(c-3) ' spawn shots
+			'if random(2) then
+				ex(c)=ex(c-3)
+				ey(c)=ey(c-3)
+			'end if
+		end if
+	next c
+	
+	'
+	' manage player shot visibility
+	'
 	if shot_y=0 then ' no shot
 		sprite 1, 0
 	elseif shot_exp<> then ' render shot explosion
