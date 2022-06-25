@@ -83,10 +83,10 @@ game_loop:
 			ey(c)=ey(c)+2
 			if ey(c)>=104 then ex(c)=0
 		elseif ex(c-3) ' spawn shots
-			'if random(2) then
+			if random(2) then
 				ex(c)=ex(c-3)
 				ey(c)=ey(c-3)
-			'end if
+			end if
 		end if
 	next c
 	
@@ -131,6 +131,36 @@ game_loop:
 	'
 	wait
 	
+	'
+	' check collision player with enemy
+	'
+	if col0 and $00fc then
+		if crash=0 then crash=60
+	end if
+	
+	'
+	' check collision of enemy with player bullet
+	'
+	if col1 and $00fc then
+		c=255
+		if col2 and $0002 then c=0
+		if col3 and $0002 then c=1
+		if col4 and $0002 then c=2
+		if col5 and $0002 then c=3
+		if col6 and $0002 then c=4
+		if col7 and $0002 then c=5
+		if c<3 then ' enemy destroyed
+			if ex(c) then
+				shot_x=ex(c):shot_y=ey(c)
+				shot_exp=4
+				ex(c)=0
+				#score=#score+1
+			end if
+		elseif c<6 then ' bullet destroyed
+			ex(c)=0
+		end if
+	end if
+		 		
 	'
 	' move stars backdrop, 10 stars are updated per loop iteration
 	' dependent on frame is even or odd
