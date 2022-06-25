@@ -7,9 +7,9 @@ on frame gosub play_effects
  ' 
 UNSIGNED #score 
 CONST STAR = $000E * 8 + 2 
-CONST SPRITE_PLAYER = $0807 + 0 * 8 
-CONST SPRITE_SHOT1 = $0805 + 1 * 8 
-CONST SPRITE_SHOT2 = $1805 + 2 * 8 
+CONST SPRITE_PLAYER = $0801 + 0 * 8 
+CONST SPRITE_SHOT1 = $0807 + 1 * 8 
+CONST SPRITE_SHOT2 = $0806 + 2 * 8 
 CONST SPRITE_EXPLOSION = $1800 + 3 * 8 
 CONST SPRITE_SHIP_1 = $0805 + 4 * 8 
 CONST SPRITE_SHIP_2 = $0805 + 5 * 8 
@@ -608,13 +608,13 @@ game_bitmaps:
 	BITMAP ".XX..XX." 
 	BITMAP ".X....X."
 	
-	BITMAP "........" 
-	BITMAP "........" 
 	BITMAP "...X...." 
+	BITMAP "..X.X..." 
+	BITMAP "..X.X..." 
 	BITMAP "...X...." 
-	BITMAP "...X...." 
-	BITMAP "...X...." 
-	BITMAP "........" 
+	BITMAP "..X.X..." 
+	BITMAP "..X.X..." 
+	BITMAP "..X.X..." 
 	BITMAP "...X...." 
 	
 	BITMAP "...X...." 
