@@ -205,12 +205,12 @@ game_loop:
 		if something=0 then ' countdown to next wave
 			next_wave=next_wave-1
 		else
-			on wave gosub move_wave_0, move_wave_1
+			on wave gosub move_wave_0, move_wave_1, move_wave_2
 		end if
 	else ' init countdown to next wave 
 		next_wave=20+random(20)
 		wave=random(2)
-		on wave gosub start_wave_0_1, start_wave_0_1
+		on wave gosub start_wave_0_1, start_wave_0_1, start_wave_2
 	end if
 		
 	'
@@ -291,7 +291,7 @@ game_over:
 ' start waves 0 and 1
 '
 start_wave_0_1:	procedure
-	'???
+	???
 	c=player_x 
 	if<24 then c=24
 	if c>144 then c=144
@@ -301,6 +301,21 @@ start_wave_0_1:	procedure
 	ex(0)=x-16:ey(0)=-16:ef(0)=4
 	ex(1)=x:ey(1)=-8:ef(1)=4
 	ex(2)=x+16:ey(2)=-16:ef(2)=4
+end
+
+'
+' start wave 2
+'
+start_wave_2:	procedure
+	'???
+	c=player_x 
+	if<24 then c=24
+	if c>144 then c=144
+	
+	' Init enemies
+	x=random(32)+player_x-16	
+	ex(0)=x-8:ey(0)=-8:ef(0)=4
+	ex(1)=x+8:ey(1)=-8:ef(1)=4
 end
 
 '
@@ -402,6 +417,53 @@ move_wave_1: procedure
 		ey(2)=ey(2)+1
 	end if	
 end
+
+move_wave_2: procedure
+	wave_state=wave_state+1
+	
+	' wave end
+	if wave_state=120 then
+		ex(0)=0:ex(1)=0:ex(2)=0
+		return
+	end if
+	
+	' horizontal movement 
+	c=wave_state and 31
+	if c<12 then
+		if ex(0) then
+			ex(0)=ex(0)-1
+			ef(0)=5
+		end if
+		if ex(1) then
+			ex(1)=ex(1)-1
+			ef(1)=5
+		end if
+	elseif c<16 then
+		ef(0)=4
+		ef(1)=4
+	elseif c<28 then
+		if ex(0) then
+			ex(0)=ex(0)+1
+			ef(0)=3
+		end if
+		if ex(1) then
+			ex(1)=ex(1)+1
+			ef(1)=3
+		end if
+	else
+		ef(0)=4
+		ef(1)=4
+	end if
+		
+		' vertical movement
+	if ex(0) then 
+		ey(0)=ey(0)+1
+	end if
+	if ex(1) then 
+		ey(1)=ey(1)+1
+	end if
+end
+
 		
 '
 ' enemy sprite frame definition
