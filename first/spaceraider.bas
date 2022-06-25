@@ -187,7 +187,7 @@ game_loop:
 	'
 	' print score and number of lives
 	'
-	print at 0 color 3,<5>score,"0"
+	print at 0 color 3,<5>#score,"0"
 	#backtab(19)=(lives+$10)*8+3
 	
 	'
@@ -205,12 +205,12 @@ game_loop:
 		if something=0 then ' countdown to next wave
 			next_wave=next_wave-1
 		else
-			on wave gosub move_wave_0
+			on wave gosub move_wave_0, move_wave_1
 		end if
 	else ' init countdown to next wave 
 		next_wave=20+random(20)
-		wave=0
-		on wave gosub start_wave_0_1
+		wave=random(2)
+		on wave gosub start_wave_0_1, start_wave_0_1
 	end if
 		
 	'
@@ -342,6 +342,55 @@ move_wave_0: procedure
 		ef(0)=4:ef(1)=4:ef(2)=4
 	end if
 	
+	' vertical movement
+	if ex(0) then 
+		ey(0)=ey(0)+1
+	end if
+	if ex(1) then 
+		ey(1)=ey(1)+1
+	end if
+	if ex(2) then 
+		ey(2)=ey(2)+1
+	end if	
+end
+
+'
+' wave 1 enemy ship movement
+'
+move_wave_1: procedure
+	wave_state=wave_state+1
+	
+	' wave end
+	if wave_state=120 then
+		ex(0)=0:ex(1)=0:ex(2)=0
+		return
+	end if
+	
+	if wave_state>=32 and wave_state<=39 then	
+		if ex(0) then
+			ef(0)=5:ex(0)=ex(0)-1
+		end if
+		if ef(2) then
+			ef(2)=3
+			ex(2)=ex(2)+1
+		end if
+	elseif wave_state=40 then
+		ef(0)=4
+		ef(2)=4
+	elseif wave_state>=64 and wave_state<=71 then
+		if ex(0) then
+			ef(0)=3
+			ex(0)=ex(0)+1
+		end if
+		if ex(2) then
+			ef(2)=5
+			ex(2)=ex(2)-1		
+		end if
+	 elseif wave_state=72 then
+		ef(0)=4
+		ef(2)=4	 
+	 end if
+		
 	' vertical movement
 	if ex(0) then 
 		ey(0)=ey(0)+1
