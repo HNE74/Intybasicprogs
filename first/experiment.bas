@@ -32,6 +32,7 @@ DEFINE 0,3,GAME_BITMAPS
 cls
 
 #backtab(25)=CHEST
+print at 210, CHEST
 print at 110,"G"
 print at 115,"G"
 game_loop:
@@ -56,10 +57,11 @@ check_player_bg: PROCEDURE
 	x=(player_x+4)/8
 	y=(player_y+4)/8
 	bg=#backtab(y*20+x-21)
-	print at 210, CHEST
+
 	if #backtab(y*20+x-21)=CHEST or bg=63 then
 		print at 230, <3>(y*20+x-21)
 		print at 236, <3>bg
+		#backtab(y*20+x-21)=0
 	else
 		print at 230, <3>0
 		print at 236, <3>bg
