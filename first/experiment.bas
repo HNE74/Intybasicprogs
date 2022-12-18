@@ -2,6 +2,7 @@
 
 
 CONST SPRITE_PLAYER = $0801 + 0 * 8 
+CONST SPRITE_ENEMY = $0802 + 1 * 8
 CONST MOB_LEFT = $0300 
 CONST MOB_TOP = $0100 
 
@@ -22,14 +23,28 @@ CONST MAX_Y = 96
 player_x=20
 player_y=20
 
-DEFINE 0,1,player 
+enemy_x=100
+enemy_y=80
+
+DEFINE 0,2,GAME_BITMAPS 
 
 cls
 game_loop:
 	wait
-	sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, sprite_player	
+	sprite 1, MOB_LEFT+player_x, MOB_TOP+player_y, sprite_player
+	sprite 0, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, sprite_enemy	
+	gosub check_collision
 	gosub control_player
 	goto game_loop
+
+
+check_collision: PROCEDURE
+	if COL1 and $0001 then 
+		print at 220, <3>player_x
+	else 
+		print at 220, <3>
+	end if
+end
 
 
 control_player: PROCEDURE
@@ -44,7 +59,6 @@ control_player: PROCEDURE
 		if (d=$60)+(d=$a0)+(d=$c0) then ' side button pressed
 		end if
 		
-		print at 220, <3>player_x
 		if (c and $1F)=DISK_N and player_y>MIN_Y then 
 			player_y=player_y-1
 		elseif (c and $1F)=DISK_NW and player_y>MIN_Y and player_x>MIN_X then 
@@ -66,12 +80,21 @@ control_player: PROCEDURE
 	end if
 end
 
-player: 
+GAME_BITMAPS: 
  BITMAP "..XXXX.." 
  BITMAP ".X....X." 
  BITMAP "X.X..X.X" 
  BITMAP "X......X"
  BITMAP "X.X..X.X" 
  BITMAP "X..XX..X" 
+ BITMAP ".X....X." 
+ BITMAP "..XXXX.."
+
+ BITMAP "..XXXX.." 
+ BITMAP ".X....X." 
+ BITMAP "X.X..X.X" 
+ BITMAP "X......X"
+ BITMAP "X..XX..X" 
+ BITMAP "X.X..X.X" 
  BITMAP ".X....X." 
  BITMAP "..XXXX.."
