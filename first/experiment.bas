@@ -3,6 +3,7 @@
 
 CONST SPRITE_PLAYER = $0801 + 0 * 8 
 CONST SPRITE_ENEMY = $0802 + 1 * 8
+CONST CHEST = $0803 + 2 * 8
 CONST MOB_LEFT = $0300 
 CONST MOB_TOP = $0100 
 
@@ -26,11 +27,13 @@ player_y=20
 enemy_x=100
 enemy_y=80
 
-DEFINE 0,2,GAME_BITMAPS 
+DEFINE 0,3,GAME_BITMAPS 
 
 cls
 
-print at 110, "A"
+#backtab(25)=CHEST
+print at 110,"G"
+print at 115,"G"
 game_loop:
 	wait
 	sprite 1, MOB_LEFT+player_x, MOB_TOP+player_y, sprite_player
@@ -53,12 +56,13 @@ check_player_bg: PROCEDURE
 	x=(player_x+4)/8
 	y=(player_y+4)/8
 	bg=#backtab(y*20+x-21)
-	if bg=15 then
+	print at 210, CHEST
+	if #backtab(y*20+x-21)=CHEST or bg=63 then
 		print at 230, <3>(y*20+x-21)
 		print at 236, <3>bg
 	else
 		print at 230, <3>0
-		print at 236, <3>0
+		print at 236, <3>bg
 	end if
 end
 
@@ -113,3 +117,13 @@ GAME_BITMAPS:
  BITMAP "X.X..X.X" 
  BITMAP ".X....X." 
  BITMAP "..XXXX.."
+ 
+ BITMAP "...XXXXX"
+ BITMAP "..X...XX"
+ BITMAP ".X...X.X"
+ BITMAP "XXXXX..X"
+ BITMAP "X...X..X"
+ BITMAP "X...X.X."
+ BITMAP "X...XX.."
+ BITMAP "XXXXX..."
+ 
