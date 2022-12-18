@@ -19,7 +19,6 @@ CONST MAX_X = 159
 CONST MIN_Y = 8
 CONST MAX_Y = 96
 
-
 player_x=20
 player_y=20
 
@@ -45,7 +44,6 @@ control_player: PROCEDURE
 		if (d=$60)+(d=$a0)+(d=$c0) then ' side button pressed
 		end if
 		
-		' player horizontal movement
 		print at 220, <3>player_x
 		if (c and $1F)=DISK_N and player_y>MIN_Y then 
 			player_y=player_y-1
@@ -67,8 +65,6 @@ control_player: PROCEDURE
 	
 	end if
 end
-
-
 
 player: 
  BITMAP "..XXXX.." 
