@@ -47,15 +47,15 @@ control_player: PROCEDURE
 		print at 220, <3>player_x
 		if (c and $1F)=DISK_N and player_y>MIN_Y then 
 			player_y=player_y-1
-		elseif (c and $1F)=DISK_NW then 
+		elseif (c and $1F)=DISK_NW and player_y>MIN_Y and player_x>MIN_X then 
 			player_y=player_y-1:player_x=player_x-1 		
-		elseif (c and $1F)=DISK_NE then 
+		elseif (c and $1F)=DISK_NE and player_y>MIN_Y and player_x<MAX_X then 
 			player_y=player_y-1:player_x=player_x+1 
 		elseif (c and $1F)=DISK_S and player_y<MAX_Y then 
 			player_y=player_y+1
-		elseif (c and $1F)=DISK_SW then 
+		elseif (c and $1F)=DISK_SW and player_y<MAX_Y and player_x>MIN_X then 
 			player_y=player_y+1:player_x=player_x-1 		
-		elseif (c and $1F)=DISK_SE then 
+		elseif (c and $1F)=DISK_SE and player_y<MAX_Y and player_x<MAX_X  then 
 			player_y=player_y+1:player_x=player_x+1 		
 		elseif (c and $1F)=DISK_W and player_x>MIN_X then 
 			player_x=player_x-1 		
