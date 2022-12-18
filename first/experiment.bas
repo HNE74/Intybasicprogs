@@ -29,12 +29,15 @@ enemy_y=80
 DEFINE 0,2,GAME_BITMAPS 
 
 cls
+
+print at 110, "A"
 game_loop:
 	wait
 	sprite 1, MOB_LEFT+player_x, MOB_TOP+player_y, sprite_player
 	sprite 0, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, sprite_enemy	
 	gosub check_collision
 	gosub control_player
+	gosub check_player_bg
 	goto game_loop
 
 
@@ -46,6 +49,18 @@ check_collision: PROCEDURE
 	end if
 end
 
+check_player_bg: PROCEDURE
+	x=(player_x+4)/8
+	y=(player_y+4)/8
+	bg=#backtab(y*20+x-21)
+	if bg=15 then
+		print at 230, <3>(y*20+x-21)
+		print at 236, <3>bg
+	else
+		print at 230, <3>0
+		print at 236, <3>0
+	end if
+end
 
 control_player: PROCEDURE
 	'
