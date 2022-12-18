@@ -236,6 +236,8 @@ game_loop:
 		end if
 	else
 		d=controller_direction(c and $1F)
+		
+		print at 220, <>player_jumping
 	
 		'print at 20 color 7, <>frame		
 		if d=1 then ' going up
@@ -275,8 +277,9 @@ game_loop:
 		end if		
 		
 		if d=2 then ' going right
-			if player_y%16 = 0 then ' player aligned with girder
+			if player_y%16=0 or player_jumping>0 then ' player aligned with girder
 				platform = player_y/8/2 ' calculate platform index
+				if player_jumping 
 				if player_x<max_platform(platform) then
 					sound_effect=1:sound_state=0
 					player_x=player_x+1
