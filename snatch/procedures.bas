@@ -3,21 +3,9 @@ print_game_data: PROCEDURE
 end
 
 draw_sprites: PROCEDURE
-	if enemy_frame=0 then
-		sprite 1, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, SPRITE_ENEMY_F1
-	elseif enemy_frame=1 then
-		sprite 1, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, SPRITE_ENEMY_F2
-	else
-		sprite 1, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, SPRITE_ENEMY_F3
-	end if
 	
-	if player_frame=0 then
-		sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, SPRITE_PLAYER_F1
-	elseif player_frame=1 then
-		sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, SPRITE_PLAYER_F2
-	else
-		sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, SPRITE_PLAYER_F3
-	end if	
+	sprite 1, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, $0802 + (3+enemy_frame) * 8
+	sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, $0801 + player_frame * 8
 	
 	frame_cnt=frame_cnt+1
 	if frame_cnt%10=0 then 
