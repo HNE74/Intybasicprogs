@@ -1,0 +1,16 @@
+IntyBASIC.exe
+IntyColor.exe
+intybasic_epilogue.asm
+intybasic_prologue.asm
+as1600.exe
+exec.bin
+grom.bin
+jzintv.exe
+libwinpthread-1.dll
+SDL2.dll
+*.asm
+*.cfg
+*.bin
+*.rom
+*.bak
+
