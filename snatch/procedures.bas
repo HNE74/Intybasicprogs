@@ -11,8 +11,6 @@ draw_sprites: PROCEDURE
 	sprite 2, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, $0802 + (3+enemy_frame) * 8
 	sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, $0801 + player_frame * 8
 	
-	
-	
 	frame_cnt=frame_cnt+1
 	if frame_cnt%10=0 then 
 		enemy_frame=enemy_frame+1
@@ -106,25 +104,27 @@ control_shot: PROCEDURE
 		shot_x=enemy_x:shot_y=enemy_y
 		
 		if player_y<enemy_y then 
-			shot_dir=SHOT_S
-		else
 			shot_dir=SHOT_N
+		else
+			shot_dir=SHOT_S
 		end if		
 	end if
 end
 
 move_shot: PROCEDURE		
-	if shot_x<=MIN_X then
+	if shot_x>MIN_X and shot_x<MAX_X and shot_y>MIN_Y and shot_y<MAX_Y then
+		if shot_dir=SHOT_N then 
+			shot_y=shot_y-SHOT_SPEED
+		elseif shot_dir=SHOT_S then 
+			shot_y=shot_y+SHOT_SPEED
+		elseif shot_dir=SHOT_W then 
+			shot_x=shot_x-SHOT_SPEED
+		elseif shot_dir=SHOT_E then 
+			shot_x=shot_x+SHOT_SPEED
+		end if
+	else
 		shot_on=0
-		return
+		sprite 1,0
 	end if
-	
-	print at 200, <3>SHOT_W
-	print at 220, <3>shot_dir
-
-	if shot_dir=SHOT_N then shot_y=shot_y-SHOT_SPEED
-	elseif shot_dir=SHOT_S then shot_y=shot_y+SHOT_SPEED
-	elseif shot_dir=SHOT_W then shot_x=shot_x-SHOT_SPEED
-	elseif shot_dir=SHOT_E then shot_x=shot_x+SHOT_SPEED
 end
 
