@@ -38,24 +38,10 @@ control_player: PROCEDURE
 		if (d=$60)+(d=$a0)+(d=$c0) then ' side button pressed
 		end if
 				
-		d=controller_direction(c and $1F)
-		if d=DISK_N and player_y>MIN_Y then 
-			player_y=player_y-1
-		elseif d=DISK_S and player_y<MAX_Y then 
-			player_y=player_y+1
-		elseif d=DISK_W and player_x>MIN_X then 
-			player_x=player_x-1 		
-		elseif d=DISK_E and player_x<MAX_X then 
-			player_x=player_x+1	
-	    elseif d=DISK_NE and player_y>MIN_Y and player_x<MAX_X then 
-			player_y=player_y-1:player_x=player_x+1 
-		elseif d=DISK_SE and player_y<MAX_Y and player_x<MAX_X  then 
-			player_y=player_y+1:player_x=player_x+1
-		elseif d=DISK_NW and player_y>MIN_Y and player_x>MIN_X then 
-			player_y=player_y-1:player_x=player_x-1 
-		elseif d=DISK_SW and player_y<MAX_Y and player_x>MIN_X then 
-			player_y=player_y+1:player_x=player_x-1 			
-		end if	
+		if cont1.up and player_y>MIN_Y then player_y=player_y-1 
+		if cont1.down and player_y<MAX_Y then player_y=player_y+1
+		if cont1.left and player_x>MIN_X then player_x=player_x-1 
+		if cont1.right and player_x<MAX_X then player_x=player_x+1	
 	end if
 end
 
