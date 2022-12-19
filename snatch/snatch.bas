@@ -3,7 +3,7 @@
 include "constants.bas"
 include "variables.bas"
 
-DEFINE 0,7,GAME_BITMAPS
+DEFINE 0,9,GAME_BITMAPS
 
 MODE 1
 cls
@@ -17,6 +17,7 @@ game_loop:
 	gosub check_collision
 	gosub control_player
 	gosub move_enemy
+	gosub control_shot
 	gosub check_player_bg
 	gosub print_game_data
 	wait

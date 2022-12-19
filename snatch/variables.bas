@@ -11,6 +11,11 @@ enemy_y=80
 enemy_speed=1
 enemy_frame=0
 
+shot_on=0
+shot_x=0
+shot_y=0
+shot_dir=0
+
 enemy_horizontal=ENEMY_E
 enemy_vertical=ENEMY_S
 

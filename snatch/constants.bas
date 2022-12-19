@@ -4,7 +4,7 @@ CONST MOB_LEFT = $0300
 CONST MOB_TOP = $0100 
 
 ' Backtab objects
-CONST CHEST = $0803 + 6 * 8
+CONST CHEST = $0803 + 8 * 8
 
 ' Controller directions
 CONST DISK_N = 1
@@ -27,3 +27,10 @@ CONST ENEMY_N = 1
 CONST ENEMY_E = 2
 CONST ENEMY_S = 3
 CONST ENEMY_W = 4
+
+' Shot directions
+CONST SHOT_N = 1
+CONST SHOT_E = 2
+CONST SHOT_S = 3
+CONST SHOT_W = 4
+CONST SHOT_SPEED=3
