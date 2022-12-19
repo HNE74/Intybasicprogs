@@ -2,6 +2,11 @@ print_game_data: PROCEDURE
 	print at 0 color 7,<5>#score,"0"
 end
 
+draw_sprites: PROCEDURE
+	sprite 1, MOB_LEFT+player_x, MOB_TOP+player_y, sprite_player
+	sprite 0, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, sprite_enemy
+end
+
 check_collision: PROCEDURE
 	if COL1 and $0001 then 
 		print at 220, <3>player_x
@@ -32,9 +37,8 @@ control_player: PROCEDURE
 	else
 		if (d=$60)+(d=$a0)+(d=$c0) then ' side button pressed
 		end if
-		
+				
 		d=controller_direction(c and $1F)
-		print at 224, <2>d
 		if d=DISK_N and player_y>MIN_Y then 
 			player_y=player_y-1
 		elseif d=DISK_S and player_y<MAX_Y then 
@@ -54,3 +58,32 @@ control_player: PROCEDURE
 		end if	
 	end if
 end
+
+move_enemy: PROCEDURE
+
+	if enemy_horizontal=ENEMY_E and enemy_x+enemy_speed>MAX_X then
+		enemy_horizontal=ENEMY_W
+	elseif enemy_horizontal=ENEMY_W and enemy_x-enemy_speed<MIN_X then
+		enemy_horizontal=ENEMY_E	
+	end if
+
+	if enemy_vertical=ENEMY_S and enemy_y+enemy_speed>MAX_Y then
+		enemy_vertical=ENEMY_N
+	elseif enemy_vertical=ENEMY_N and enemy_y-enemy_speed<MIN_Y then
+		enemy_vertical=ENEMY_S	
+	end if
+
+	if enemy_horizontal=ENEMY_E then 
+		enemy_x=enemy_x+enemy_speed
+	else
+		enemy_x=enemy_x-enemy_speed	
+	end if
+	
+	if enemy_vertical=ENEMY_S then 
+		enemy_y=enemy_y+enemy_speed
+	else
+		enemy_y=enemy_y-enemy_speed	
+	end if		
+
+end
+
