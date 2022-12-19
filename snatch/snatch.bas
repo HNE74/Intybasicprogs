@@ -3,8 +3,9 @@
 include "constants.bas"
 include "variables.bas"
 
-DEFINE 0,3,GAME_BITMAPS 
+DEFINE 0,7,GAME_BITMAPS
 
+MODE 1
 cls
 
 #backtab(25)=CHEST
