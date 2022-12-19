@@ -7,14 +7,14 @@ CONST CHEST = $0803 + 2 * 8
 CONST MOB_LEFT = $0300 
 CONST MOB_TOP = $0100 
 
-CONST DISK_N = 4
-CONST DISK_NE = 22
-CONST DISK_NW = 28
-CONST DISK_S = 1
-CONST DISK_SE = 19
-CONST DISK_SW = 25
+CONST DISK_N = 1
+CONST DISK_NE = 5
+CONST DISK_NW = 7
+CONST DISK_S = 3
+CONST DISK_SE = 6
+CONST DISK_SW = 8
 CONST DISK_E = 2
-CONST DISK_W = 8
+CONST DISK_W = 4
 
 CONST MIN_X = 8
 CONST MAX_X = 159
@@ -73,29 +73,30 @@ control_player: PROCEDURE
 	' player management
 	'
 	c = cont
-	d = c and $e0
 	if (d=$80)+(d=$40)+(d=$20) then
 		' keypad pressed
 	else
 		if (d=$60)+(d=$a0)+(d=$c0) then ' side button pressed
 		end if
 		
-		if (c and $1F)=DISK_N and player_y>MIN_Y then 
+		d=controller_direction(c and $1F)
+		print at 224, <2>d
+		if d=DISK_N and player_y>MIN_Y then 
 			player_y=player_y-1
-		elseif (c and $1F)=DISK_NW and player_y>MIN_Y and player_x>MIN_X then 
-			player_y=player_y-1:player_x=player_x-1 		
-		elseif (c and $1F)=DISK_NE and player_y>MIN_Y and player_x<MAX_X then 
-			player_y=player_y-1:player_x=player_x+1 
-		elseif (c and $1F)=DISK_S and player_y<MAX_Y then 
+		elseif d=DISK_S and player_y<MAX_Y then 
 			player_y=player_y+1
-		elseif (c and $1F)=DISK_SW and player_y<MAX_Y and player_x>MIN_X then 
-			player_y=player_y+1:player_x=player_x-1 		
-		elseif (c and $1F)=DISK_SE and player_y<MAX_Y and player_x<MAX_X  then 
-			player_y=player_y+1:player_x=player_x+1 		
-		elseif (c and $1F)=DISK_W and player_x>MIN_X then 
+		elseif d=DISK_W and player_x>MIN_X then 
 			player_x=player_x-1 		
-		elseif (c and $1F)=DISK_E and player_x<MAX_X then 
+		elseif d=DISK_E and player_x<MAX_X then 
 			player_x=player_x+1	
+	    elseif d=DISK_NE and player_y>MIN_Y and player_x<MAX_X then 
+			player_y=player_y-1:player_x=player_x+1 
+		elseif d=DISK_SE and player_y<MAX_Y and player_x<MAX_X  then 
+			player_y=player_y+1:player_x=player_x+1
+		elseif d=DISK_NW and player_y>MIN_Y and player_x>MIN_X then 
+			player_y=player_y-1:player_x=player_x-1 
+		elseif d=DISK_SW and player_y<MAX_Y and player_x>MIN_X then 
+			player_y=player_y+1:player_x=player_x-1 			
 		end if	
 	
 	end if
@@ -128,4 +129,10 @@ GAME_BITMAPS:
  BITMAP "X...X.X."
  BITMAP "X...XX.."
  BITMAP "XXXXX..."
+ 
+controller_direction: 
+	DATA 0,3,2,3,1,0,2,0 
+	DATA 4,4,0,0,1,0,0,0 
+	DATA 0,3,2,6,1,0,5,0 
+	DATA 4,8,0,0,7,0,0,0
  
