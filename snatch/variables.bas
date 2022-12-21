@@ -1,5 +1,5 @@
 #score=0
-level=1
+level=0
 lives=3
 accu=0
 

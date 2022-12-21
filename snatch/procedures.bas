@@ -2,6 +2,32 @@ print_game_data: PROCEDURE
 	print at 1 color 7,<6>#score
 end
 
+next_level: PROCEDURE
+	gosub clear_arena	
+	if player_items>0 then 
+		print at 61, <3>player_items
+		print at 65, "ITEMS SNATCHED"
+	end if
+
+	player_items=0
+	level=level+1	
+	
+	print at 101, "STARTING LEVEL"
+	print at 116, <3>level
+	for accu=0 to 200:wait:next accu
+	gosub clear_arena
+end
+
+clear_arena: PROCEDURE
+	for accu=0 to 2
+		sprite accu,0
+	next accu
+
+	for accu=0 to 10
+		print at accu*20+20, "                    "
+	next accu
+end
+
 init_main_loop: PROCEDURE
 	player_x=20
 	player_y=20
@@ -22,7 +48,7 @@ end
 
 spawn_items: PROCEDURE
 	for accu=0 to 8+level
-		#backtab(random(220))=CHEST
+		#backtab(random(220)+20)=CHEST
 	next accu
 	
 	player_items=0
@@ -60,7 +86,7 @@ check_player_bg: PROCEDURE
 		player_items=player_items+1
 		if player_items=9+level then game_state=GAME_STATE_PROCEED		
 	end if
-	print at 220, <2>player_items
+	'print at 220, <2>player_items
 end
 
 control_player: PROCEDURE
@@ -113,7 +139,7 @@ control_shot: PROCEDURE
 	if shot_on>0 then gosub move_shot:return
 	
 	if player_y=enemy_y then 
-		if 2-level>0 then 
+		if 10-level>0 then 
 			accu=MIN_DIFFICULTY-level
 		else
 			accu=1
@@ -129,11 +155,11 @@ control_shot: PROCEDURE
 			shot_dir=SHOT_E
 		end if
 	elseif player_x=enemy_x then
-		if 2-level>0 then 
+		if 10-level>0 then 
 			accu=MIN_DIFFICULTY-level
 		else
 			accu=1
-		end if		
+		end if	
 		if rand(accu)>0 then return
 		
 		shot_on=6

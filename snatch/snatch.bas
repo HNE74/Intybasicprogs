@@ -8,6 +8,8 @@ DEFINE 0,14,GAME_BITMAPS
 MODE 1
 cls
 
+next_level_loop:
+gosub next_level
 gosub spawn_items
 game_state = GAME_STATE_MAIN
 
@@ -28,6 +30,7 @@ while game_state=GAME_STATE_DEAD
 	gosub player_dead
 wend
 if game_state=GAME_STATE_MAIN then goto main_loop
+else if game_state=GAME_STATE_PROCEED then goto next_level_loop
 
 include "procedures.bas"
 include "data.bas"
