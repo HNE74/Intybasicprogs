@@ -126,14 +126,30 @@ end
 move_enemy: PROCEDURE
 	if enemy_horizontal=ENEMY_E and enemy_x+enemy_speed>MAX_X then
 		enemy_horizontal=ENEMY_W
+		if sound_effect<>SOUND_EFFECT_SHOT then
+			gosub sound_none
+			sound_effect=SOUND_EFFECT_BUMP
+		end if
 	elseif enemy_horizontal=ENEMY_W and enemy_x-enemy_speed<MIN_X then
-		enemy_horizontal=ENEMY_E	
+		enemy_horizontal=ENEMY_E
+		if sound_effect<>SOUND_EFFECT_SHOT then
+			gosub sound_none
+			sound_effect=SOUND_EFFECT_BUMP
+		end if	
 	end if
 
 	if enemy_vertical=ENEMY_S and enemy_y+enemy_speed>MAX_Y then
 		enemy_vertical=ENEMY_N
+		if sound_effect<>SOUND_EFFECT_SHOT then
+			gosub sound_none
+			sound_effect=SOUND_EFFECT_BUMP
+		end if
 	elseif enemy_vertical=ENEMY_N and enemy_y-enemy_speed<MIN_Y then
-		enemy_vertical=ENEMY_S	
+		enemy_vertical=ENEMY_S
+		if sound_effect<>SOUND_EFFECT_SHOT then
+			gosub sound_none
+			sound_effect=SOUND_EFFECT_BUMP
+		end if
 	end if
 
 	if enemy_horizontal=ENEMY_E then 
@@ -232,7 +248,7 @@ player_dead: PROCEDURE
 end
 
 play_effects: PROCEDURE
-	on sound_effect gosub sound_none, sound_snatch, sound_shot, sound_death
+	on sound_effect gosub sound_none, sound_snatch, sound_shot, sound_bump
 end
 
 sound_none: PROCEDURE
@@ -254,9 +270,11 @@ sound_shot: PROCEDURE
 	if sound_state=30 then sound_effect=0:sound_state=0
 end
 
-sound_death: PROCEDURE
-	sound 0,1000+(sound_state/4%2)*500,10
+sound_bump: PROCEDURE
+	sound 0,250-sound_state*2,8
 	sound_state=sound_state+1
-	if sound_state=30 then sound_effect=0:sound_state=0
+	if sound_state=5 then sound_effect=0:sound_state=0
 end
+
+
 
