@@ -1,5 +1,5 @@
 print_game_data: PROCEDURE
-	print at 1 color 7,<5>#score,"0"
+	print at 1 color 7,<6>#score
 end
 
 init_main_loop: PROCEDURE
@@ -14,13 +14,18 @@ init_main_loop: PROCEDURE
 	
 	shot_on=0
 	
-	print at 16, "    "
-	
+	print at 16, "    "	
 	for accu=1 to lives
-		#backtab((19-accu))=$0801 + 2 * 8
+		#backtab(19-accu)=$0801 + 2 * 8
+	next accu
+end
+
+spawn_items: PROCEDURE
+	for accu=0 to 8+level
+		#backtab(random(220))=CHEST
 	next accu
 	
-	'print at 13, "LIVES:":print at 19 COLOR 7, <1>lives
+	player_items=0
 end
 
 draw_sprites: PROCEDURE	
@@ -49,14 +54,13 @@ check_player_bg: PROCEDURE
 	y=(player_y+4)/8
 	bg=#backtab(y*20+x-21)
 
-	if #backtab(y*20+x-21)=CHEST or bg=63 then
-		print at 230, <3>(y*20+x-21)
-		print at 236, <3>bg
+	if #backtab(y*20+x-21)=CHEST then
+		#score=#score+10
 		#backtab(y*20+x-21)=0
-	else
-		print at 230, <3>0
-		print at 236, <3>bg
+		player_items=player_items+1
+		if player_items=9+level then game_state=GAME_STATE_PROCEED		
 	end if
+	print at 220, <2>player_items
 end
 
 control_player: PROCEDURE

@@ -8,11 +8,7 @@ DEFINE 0,14,GAME_BITMAPS
 MODE 1
 cls
 
-#backtab(25)=CHEST
-print at 210, CHEST
-print at 110,"G"
-print at 115,"G"
-
+gosub spawn_items
 game_state = GAME_STATE_MAIN
 
 main_loop:

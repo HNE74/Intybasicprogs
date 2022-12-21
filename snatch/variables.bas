@@ -9,6 +9,7 @@ game_state=0
 player_x=20
 player_y=20
 player_frame=0
+player_items=0
 
 enemy_x=100
 enemy_y=80

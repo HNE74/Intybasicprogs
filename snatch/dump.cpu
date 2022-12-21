@@ -1,10 +1,10 @@
 CP-1600 State Dump
-Tot Cycles:   2319788
-Tot Instrs:   237206
-Tot Cache:    1115
+Tot Cycles:   20644493
+Tot Instrs:   2077174
+Tot Cache:    1267
 Tot NonCache: 0
-Registers:    0087 0000 0005 0007 0206 0087 02f0 0087
-Flags:        S:0 C:0 O:0 Z:0 I:1 D:0 intr:3 irq:0
+Registers:    0000 000a 0006 0007 0207 0087 02f0 0087
+Flags:        S:1 C:1 O:0 Z:0 I:1 D:0 intr:3 irq:0
 Cacheability Map:
    0000-01ff: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
    0200-03ff: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0
@@ -51,7 +51,7 @@ Cacheability Map:
    5400-55ff: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
    5600-57ff: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
    5800-59ff: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-   5a00-5bff: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   5a00-5bff: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
    5c00-5dff: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
    5e00-5fff: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
    6000-61ff: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -458,33 +458,33 @@ Decoded Instruction Map:
    5000-503f:--------------------C-C-C-CCC-CCC--C-CCCCCC-C-------------------
    5040-507f:CC-C--C-C-C--C-C-C--CC-C-CCCCCC-C-C-C-C--C---CCC-C---CC-C---CCC-
    5080-50bf:CCC-C-C-C-CC-C-CCC-C-C-C-C-C-C-C---------C-C---C--C--C--C-C-C-C-
-   50c0-50ff:C-C--CC-C-C-C-C-CC-C-CC-C-C-C-CC-C-C-C-C-C-C-CC-C-CC-C-CC-C-C-C-
-   5100-513f:C-CC-C-C-C-C-C-C-C--C-C-C-C-C-C-CC-C-C-CC-C-CC-C-C-CC-C-CC-C-C-C
-   5140-517f:-C-C-C--C--C--C--C--C--C--C--C-CC-C-C-C-C-C-C-C-C--C-C-C-C-CC-CC
-   5180-51bf:C-C-C-C-C-C-C-C-C-C-C-C-C-C-CCCC-C-C-C-C-C-C-C-C-CCC-C-C-C-C-C-C
-   51c0-51ff:-C-C-CCC-C-C-CC-C-C-C-C-C-C-CC-C-C-C-CC-CCC-C-C-C-CC-C-C-CCC-C-C
-   5200-523f:CCC-C-C-CCCC-C-C-CCCCC-CCC-C-C-CCCCC-CCC-C-C-CC-C-C-C-CCCCCC----
-   5240-527f:-------------------------------------------------------C-C-CC-C-
-   5280-52bf:C-C--C-C-C-C-C-C-C-C--C-CCC-C-C-C-C-C-C-CC-C-C-C-CCC-C-C-C-CCC--
-   52c0-52ff:-C-C-C-C-CC-C-C-C-CCC-C-C-C-CCC-C-C-C-C-C-C-C--CC------C-C-C-C-C
-   5300-533f:-C-C--CC------C-C-C-C-C-C-C--CC------C-C-C-C-C-C-C--CC------C-C-
-   5340-537f:C-C-C-C-CCCCC-C-C-CCCCC-C-C-CCCCC-C-C-C-CCC---------------CCC-C-
-   5380-53bf:C-C-CC-C-C-C-C-CCC-C-C-C-C-C-C-C-CC-C-C-C-C-CCC-----C-C-C-C-CC-C
-   53c0-53ff:-C-C-C-CCC-C-C-C-C-C-C-C-CC-C-C-C-C-CCC-C-C-C-C-C-C-C-C-C-C-C-C-
-   5400-543f:C-C-C-C-C-C-C-C-C-C-CCC-C-C-C--CC-C-C-C-C-C-C-C-C-C-C-----C-C-C-
-   5440-547f:-CC-C-C--C-C-C-C-C-C-C-C-C-C-C-C-----C-C-C-C--------------------
-   5480-54bf:--------------------------------------------CCC-C-C-C--C-C-C-C--
-   54c0-54ff:CC-C-C-C--CC-C-C-C--CC-C-C-C---------C-C-C---------C-C-C-C-C-C-C
-   5500-553f:-------------C------C-------------------------------------------
-   5540-557f:----------------------------------------------------------------
-   5580-55bf:-----CC-C-C-C------------CC-CC-CC-CC-C-C-CC-CC-C-CC-C-C-C-CC-CCC
-   55c0-55ff:-CC-C-C-C-C-C-C-C-C-C-CCCCCCCCCCCCCCCCC-CCCCCCCCCC-C-C-CCCCCCCC-
-   5600-563f:C-CC-C-CCC-CC-CCCCCCCCCCCCCCCCCC-C-C-CC-------------------------
-   5640-567f:------C--C-CC-CC-CCCCCC-CCC-CC-CCCCC-CCC-CC-CCCCC-CCC-CC-C-CC---
-   5680-56bf:--------------CCCC-CCC-C-CC-C-CCCCC-C-C-CC-CCC-CC-CC------------
-   56c0-56ff:---CCC----------------------------------------------------------
-   5700-573f:----------------------------------------------------------------
-   5740-577f:----------------------------------------------------------------
+   50c0-50ff:C-C--CC-C-C-C-C-CC-C-CC-C-C-C-CC-C-C-C-C-C-C-C-CC-C-CC-C-CC-C-C-
+   5100-513f:C-C-CC-C-C-C-C-C-C-C--C--C-C-C--C-C-C-C--C--C--C--C--C--C--C--C-
+   5140-517f:C-C-C-C--C-C-C-C-CC-C-C-C-C-C-C-C-C--C-CCC-C-C-CC-C-C-C-C-C-C-CC
+   5180-51bf:-C-C-C-CC-CCCCCC-C-C-C-C-C-CC-CCC-CC-C-C-CCCC-C-C--C--CC-C-CC-CC
+   51c0-51ff:C-CC-C-C-CC-CC-CCC-C-C-C-C-C-C-C-C-C-C-C-C-C-CCCC-C-C-C-C-C-C-C-
+   5200-523f:C-CCC-C-C-C-C-C-C-C-C-CCC-C-C-CC-C-C-C-C-C-C-CC-C-C-C-CC-CCC-C-C
+   5240-527f:-C-C-CCC-C-CCCC-C-C-CCCC-C-C-CCCCC-CCC-C-C-CCCCC-CCC-C-C-C-C-C-C
+   5280-52bf:-CCCCC-CCCCC-CC-C-C-C-CC-C-C-C-C-C-C-C-C-C--C-CCC-C-C-C-C-C-C-CC
+   52c0-52ff:-C-C-C-CCC-C-C-C-CCC---C-C-C-C-CC-C-C-C-CCC-C-C-C-CCC-C-C-C-C-C-
+   5300-533f:C-C-CCC-C-CC-C-C-C-C-C-C-C--CC-C-CC-C-C-C-C-C-C-C--CC-C-CC-C-C-C
+   5340-537f:-C-C-C-C--CC-C-CC-C-C-C-C-C-C-CCCCC-C-C-CCCCC-C-C-CCCCC-C-C-C-CC
+   5380-53bf:C-C-CC-C-C-C-CC-CCC-C-C-C-CC-C-C-C-C-CCC-C-C-C-C-C-C-C-CC-C-C-C-
+   53c0-53ff:C-CCC-C-C-C-C-C-C-CC-C-C-C-C-CCC-C-C-C-C-C-C-C-CC-C-C-C-C-CCC-C-
+   5400-543f:C-C-C-C-C-C-C-C-C-C-C-C-C-C-C-C-C-C-C-C-C-CCC-C-C-C--CC-C-C-C-C-
+   5440-547f:C-C-C-C-C-C-----C-C-C--CC-C-C-CC-C-C-C-C-C-C-C-C-------C-C-C-C-C
+   5480-54bf:-C-C-C-C-C-C-C-C-C-----C-C-C--CC-C-C-C--------------------------
+   54c0-54ff:--CCC-C-C-C--C-C-C-C-CCC-C-C-C--CC-C-C-C--CC-C-C-C---------C-C-C
+   5500-553f:---------C-C-C---------C-C-C-C-C-C-C-CC-C-CCCC-C-C-C-C-C-C-C-C-C
+   5540-557f:CC-C-CC-C--C-CC-C-C-C-CC-C-C-CC-C-C-CCCC-CC-C-C-C-CC-C-CC-------
+   5580-55bf:C-C-C-----------------------------------------------------------
+   55c0-55ff:----------------------------------------------------------------
+   5600-563f:---------CC-C-C-C------------CC-CC-CC-CC-C-C-CC-CC-C-CC-C-C-C-CC
+   5640-567f:-CCC-CC-C-C-C-C-C-C-C-C-C-CCCCCCCCCCCCCCCCC-CCCCCCCCCC-C-C-CCCCC
+   5680-56bf:CCC-C-CC-C-CCC-CC-CCCCCCCCCCCCCCCCCC-C-C-CC---------------------
+   56c0-56ff:----------C--C-CC-CC-CCCCCC-CCC-CC-CCCCC-CCC-CC-CCCCC-CCC-CC-C-C
+   5700-573f:C-----------------CCCC-CCC-C-CC-C-CCCCC-C-C-CC-CCC-CC-CC-CC-C-CC
+   5740-577f:-CCCCC-CCC------------------------------------------------------
    5780-57bf:----------------------------------------------------------------
    57c0-57ff:----------------------------------------------------------------
    5800-583f:----------------------------------------------------------------
@@ -494,9 +494,9 @@ Decoded Instruction Map:
    5900-593f:----------------------------------------------------------------
    5940-597f:----------------------------------------------------------------
    5980-59bf:----------------------------------------------------------------
-   59c0-59ff:----CC-CCCCC----------------------------------------------------
+   59c0-59ff:----------------------------------------------------------------
    5a00-5a3f:----------------------------------------------------------------
-   5a40-5a7f:----------------------------------------------------------------
+   5a40-5a7f:--------CC-CCCCC------------------------------------------------
    5a80-5abf:----------------------------------------------------------------
    5ac0-5aff:----------------------------------------------------------------
    5b00-5b3f:----------------------------------------------------------------
