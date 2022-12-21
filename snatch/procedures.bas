@@ -28,13 +28,20 @@ clear_arena: PROCEDURE
 	next accu
 end
 
+init_game: PROCEDURE
+	#score=0
+	level=0
+	lives=3
+	player_items=0
+end
+
 init_main_loop: PROCEDURE
 	player_x=20
 	player_y=20
 	player_frame=0
 
-	enemy_x=100
-	enemy_y=80
+	enemy_x=random(50)+70
+	enemy_y=random(50)+30
 	enemy_speed=1
 	enemy_frame=0
 	
@@ -48,7 +55,13 @@ end
 
 spawn_items: PROCEDURE
 	for accu=0 to 8+level
-		#backtab(random(220)+20)=CHEST
+place_item:
+		player_items=random(220)+20
+		if #backtab(player_items)=BLANK then
+			#backtab(player_items)=CHEST
+		else
+			goto place_item
+		end if
 	next accu
 	
 	player_items=0
@@ -84,9 +97,10 @@ check_player_bg: PROCEDURE
 		#score=#score+10
 		#backtab(y*20+x-21)=0
 		player_items=player_items+1
+		gosub sound_none
+		sound_effect=SOUND_EFFECT_SNATCH
 		if player_items=9+level then game_state=GAME_STATE_PROCEED		
 	end if
-	'print at 220, <2>player_items
 end
 
 control_player: PROCEDURE
@@ -148,6 +162,8 @@ control_shot: PROCEDURE
 		
 		shot_on=7
 		shot_x=enemy_x:shot_y=enemy_y
+		gosub sound_none
+		sound_effect=SOUND_EFFECT_SHOT
 		
 		if player_x<enemy_x then 
 			shot_dir=SHOT_W
@@ -164,6 +180,8 @@ control_shot: PROCEDURE
 		
 		shot_on=6
 		shot_x=enemy_x:shot_y=enemy_y
+		gosub sound_none
+		sound_effect=SOUND_EFFECT_SHOT
 		
 		if player_y<enemy_y then 
 			shot_dir=SHOT_N
@@ -187,15 +205,22 @@ move_shot: PROCEDURE
 	else
 		shot_on=0
 		sprite 1,0
+		gosub sound_none
+		sound_effect=SOUND_EFFECT_NONE
 	end if
 end
 
 player_dead: PROCEDURE
+	gosub sound_none
 	for player_frame=0 to 3
 		sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, $0801+(9+player_frame) * 8	
-		for accu=0 to 20:wait:next accu
+		for accu=0 to 20
+			sound 0,1000+(accu/4%2)*500,10
+			wait
+		next accu
 	next player_frame
-
+	gosub sound_none
+	
 	for accu=0 to 2:sprite accu,0:next accu
 
 	lives=lives-1	
@@ -204,5 +229,33 @@ player_dead: PROCEDURE
 	else
 		game_state=GAME_STATE_MAIN
 	end if
+end
+
+play_effects: PROCEDURE
+	on sound_effect gosub sound_none, sound_snatch, sound_shot, sound_death
+end
+
+sound_none: PROCEDURE
+	sound 0,,0
+	sound 4,,$38
+end
+
+sound_snatch: PROCEDURE
+	sound 0,220-sound_state*20,10
+	sound_state=sound_state+1
+	if sound_state=10 then sound_effect=0:sound_state=0
+end
+
+sound_shot: PROCEDURE
+	sound 0,2000,15-sound_explosion1/4
+	sound 4,sound_explosion1/2+4,$30
+	sound_state=sound_state+1
+	if sound_state=30 then sound_effect=0:sound_state=0
+end
+
+sound_death: PROCEDURE
+	sound 0,1000+(sound_state/4%2)*500,10
+	sound_state=sound_state+1
+	if sound_state=30 then sound_effect=0:sound_state=0
 end
 

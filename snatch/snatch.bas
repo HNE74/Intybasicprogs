@@ -6,7 +6,11 @@ include "variables.bas"
 DEFINE 0,14,GAME_BITMAPS
 
 MODE 1
+on frame gosub play_effects
 cls
+
+init_game_loop:
+gosub init_game
 
 next_level_loop:
 gosub next_level
@@ -31,6 +35,8 @@ while game_state=GAME_STATE_DEAD
 wend
 if game_state=GAME_STATE_MAIN then goto main_loop
 else if game_state=GAME_STATE_PROCEED then goto next_level_loop
+
+goto init_game_loop
 
 include "procedures.bas"
 include "data.bas"
