@@ -1,8 +1,10 @@
 #score=0
 level=1
+lives=3
 accu=0
 
 frame_cnt=0
+game_state=0
 
 player_x=20
 player_y=20

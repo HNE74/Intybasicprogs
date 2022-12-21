@@ -1,9 +1,29 @@
 print_game_data: PROCEDURE
-	print at 0 color 7,<5>#score,"0"
+	print at 1 color 7,<5>#score,"0"
 end
 
-draw_sprites: PROCEDURE
+init_main_loop: PROCEDURE
+	player_x=20
+	player_y=20
+	player_frame=0
+
+	enemy_x=100
+	enemy_y=80
+	enemy_speed=1
+	enemy_frame=0
 	
+	shot_on=0
+	
+	print at 16, "    "
+	
+	for accu=1 to lives
+		#backtab((19-accu))=$0801 + 2 * 8
+	next accu
+	
+	'print at 13, "LIVES:":print at 19 COLOR 7, <1>lives
+end
+
+draw_sprites: PROCEDURE	
 	if shot_on>0 then
 		sprite 1, MOB_LEFT+shot_x, MOB_TOP+shot_y, $0800 + (frame_cnt%6) + shot_on * 8
 	end if
@@ -19,10 +39,8 @@ draw_sprites: PROCEDURE
 end
 
 check_collision: PROCEDURE
-	if COL1 and $0001 then 
-		'print at 220, <3>player_x
-	else 
-		'print at 220, <3>""
+	if col0 and $0006 then
+		game_state=GAME_STATE_DEAD
 	end if
 end
 
@@ -96,7 +114,7 @@ control_shot: PROCEDURE
 		else
 			accu=1
 		end if		
-		if random(accu)>0 then return
+		if rand(accu)>0 then return
 		
 		shot_on=7
 		shot_x=enemy_x:shot_y=enemy_y
@@ -112,7 +130,7 @@ control_shot: PROCEDURE
 		else
 			accu=1
 		end if		
-		if random(accu)>0 then return
+		if rand(accu)>0 then return
 		
 		shot_on=6
 		shot_x=enemy_x:shot_y=enemy_y
@@ -139,6 +157,22 @@ move_shot: PROCEDURE
 	else
 		shot_on=0
 		sprite 1,0
+	end if
+end
+
+player_dead: PROCEDURE
+	for player_frame=0 to 3
+		sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, $0801+(9+player_frame) * 8	
+		for accu=0 to 20:wait:next accu
+	next player_frame
+
+	for accu=0 to 2:sprite accu,0:next accu
+
+	lives=lives-1	
+	if lives=0 then 
+		game_state=GAME_STATE_OVER	
+	else
+		game_state=GAME_STATE_MAIN
 	end if
 end
 
