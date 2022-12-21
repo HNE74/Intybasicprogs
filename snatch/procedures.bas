@@ -5,7 +5,7 @@ end
 draw_sprites: PROCEDURE
 	
 	if shot_on>0 then
-		sprite 1, MOB_LEFT+shot_x, MOB_TOP+shot_y, $0803 + shot_on * 8
+		sprite 1, MOB_LEFT+shot_x, MOB_TOP+shot_y, $0800 + (frame_cnt%6) + shot_on * 8
 	end if
 	
 	sprite 2, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, $0802 + (3+enemy_frame) * 8
@@ -20,9 +20,9 @@ end
 
 check_collision: PROCEDURE
 	if COL1 and $0001 then 
-		print at 220, <3>player_x
+		'print at 220, <3>player_x
 	else 
-		print at 220, <3>""
+		'print at 220, <3>""
 	end if
 end
 
@@ -91,6 +91,15 @@ control_shot: PROCEDURE
 	if shot_on>0 then gosub move_shot:return
 	
 	if player_y=enemy_y then 
+		if 2-level>0 then 
+			accu=5-level
+		else
+			accu=1
+		end if	
+		print at 220, <3>random(0,accu)
+		
+		if random(0,accu)>0 then return
+		
 		shot_on=7
 		shot_x=enemy_x:shot_y=enemy_y
 		
@@ -100,6 +109,13 @@ control_shot: PROCEDURE
 			shot_dir=SHOT_E
 		end if
 	elseif player_x=enemy_x then
+		if 2-level>0 then 
+			accu=5-level
+		else
+			accu=1
+		end if	
+		print at 220, <3>accu
+		if random(0,accu)>0 then return
 		shot_on=6
 		shot_x=enemy_x:shot_y=enemy_y
 		

@@ -1,4 +1,6 @@
 #score=0
+level=1
+accu=0
 
 frame_cnt=0
 
