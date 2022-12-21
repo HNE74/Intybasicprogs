@@ -236,6 +236,7 @@ play_effects: PROCEDURE
 end
 
 sound_none: PROCEDURE
+	sound_state=0
 	sound 0,,0
 	sound 4,,$38
 end
