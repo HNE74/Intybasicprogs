@@ -92,13 +92,11 @@ control_shot: PROCEDURE
 	
 	if player_y=enemy_y then 
 		if 2-level>0 then 
-			accu=5-level
+			accu=MIN_DIFFICULTY-level
 		else
 			accu=1
-		end if	
-		print at 220, <3>random(0,accu)
-		
-		if random(0,accu)>0 then return
+		end if		
+		if random(accu)>0 then return
 		
 		shot_on=7
 		shot_x=enemy_x:shot_y=enemy_y
@@ -110,12 +108,12 @@ control_shot: PROCEDURE
 		end if
 	elseif player_x=enemy_x then
 		if 2-level>0 then 
-			accu=5-level
+			accu=MIN_DIFFICULTY-level
 		else
 			accu=1
-		end if	
-		print at 220, <3>accu
-		if random(0,accu)>0 then return
+		end if		
+		if random(accu)>0 then return
+		
 		shot_on=6
 		shot_x=enemy_x:shot_y=enemy_y
 		

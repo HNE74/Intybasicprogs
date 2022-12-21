@@ -6,6 +6,9 @@ CONST MOB_TOP = $0100
 ' Backtab objects
 CONST CHEST = $0803 + 8 * 8
 
+' Minimal difficulty
+CONST MIN_DIFFICULTY=10
+
 ' Controller directions
 CONST DISK_N = 1
 CONST DISK_NE = 5
