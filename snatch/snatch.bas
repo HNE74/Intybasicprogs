@@ -29,7 +29,7 @@ while game_state = GAME_STATE_MAIN
 	gosub move_enemy
 	gosub control_shot
 	gosub check_player_bg
-	gosub print_game_data
+	gosub print_score
 	gosub check_collision	
 	wait
 wend

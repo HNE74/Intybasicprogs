@@ -1,4 +1,4 @@
-print_game_data: PROCEDURE
+print_score: PROCEDURE
 	print at 1 color 6,<6>#score
 end
 
@@ -286,7 +286,7 @@ end
 
 next_level: PROCEDURE
 	gosub clear_arena
-	gosub print_game_data
+	gosub print_score
 	gosub print_lives_left
 	gosub print_shields_left
 	if player_items>0 then 
@@ -314,7 +314,7 @@ game_over: PROCEDURE
 	
 	if #score>#high then
 		#high=#score
-		print at 162 color 2, "NEW HIGHSCORE!"
+		print at 163 color 2, "NEW HIGHSCORE!"
 	end if
 
 	for accu=0 to 200:wait:next accu	
