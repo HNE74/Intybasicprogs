@@ -68,6 +68,16 @@ place_item:
 		end if
 	next accu
 	
+	if level%5=0 and lives<3 then
+place_live:
+		player_items=random(220)+20
+		if #backtab(player_items)=BLANK then
+			#backtab(player_items)=LIVE
+		else
+			goto place_live
+		end if
+	end if
+
 	if level%3=0 and shields<3 then
 place_shield:
 		player_items=random(220)+20
@@ -117,18 +127,24 @@ check_player_bg: PROCEDURE
 	bg=#backtab(y*20+x-21)
 
 	if #backtab(y*20+x-21)=CHEST then
+		sound_effect=SOUND_EFFECT_SNATCH
 		#score=#score+10
 		#backtab(y*20+x-21)=0
 		player_items=player_items+1
 		gosub sound_none
-		sound_effect=SOUND_EFFECT_SNATCH
 		if player_items=9+level then game_state=GAME_STATE_PROCEED
     elseif #backtab(y*20+x-21)=SHIELD then
+		sound_effect=SOUND_EFFECT_SNATCH
 		shields=shields+1
 		#backtab(y*20+x-21)=0
 		gosub print_shields_left
 		gosub sound_none
+    elseif #backtab(y*20+x-21)=LIVE then
 		sound_effect=SOUND_EFFECT_SNATCH
+		lives=lives+1
+		#backtab(y*20+x-21)=0
+		gosub print_lives_left
+		gosub sound_none	
 	end if
 end
 

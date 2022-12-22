@@ -6,6 +6,8 @@ CONST MOB_TOP = $0100
 ' Backtab objects
 CONST CHEST = $0803 + 13 * 8
 CONST SHIELD = $0807 + 14 * 8
+CONST SHIELD = $0807 + 14 * 8
+CONST LIVE = $0807 + 2 * 8
 
 ' Minimal difficulty
 CONST MIN_DIFFICULTY=10
