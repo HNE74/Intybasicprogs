@@ -235,8 +235,8 @@ next_level: PROCEDURE
 	gosub print_game_data
 	gosub print_lives_left
 	if player_items>0 then 
-		print at 81, color 5, <3>player_items
-		print at 85, color 5, "ITEMS SNATCHED"
+		print at 81 color 5, <3>player_items
+		print at 85 color 5, "ITEMS SNATCHED"
 	end if
 
 	player_items=0
