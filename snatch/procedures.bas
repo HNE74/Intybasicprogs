@@ -28,6 +28,8 @@ init_main_loop: PROCEDURE
 	enemy_y=random(50)+30
 	enemy_speed=1
 	enemy_frame=0
+	enemy_horizontal=ENEMY_E
+	enemy_vertical=ENEMY_S
 	
 	shot_on=0
 	gosub print_lives_left
