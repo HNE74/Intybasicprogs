@@ -2,29 +2,13 @@ print_game_data: PROCEDURE
 	print at 1 color 7,<6>#score
 end
 
-next_level: PROCEDURE
-	gosub clear_arena	
-	if player_items>0 then 
-		print at 61, <3>player_items
-		print at 65, "ITEMS SNATCHED"
-	end if
-
-	player_items=0
-	level=level+1	
-	
-	print at 101, "STARTING LEVEL"
-	print at 116, <3>level
-	for accu=0 to 200:wait:next accu
-	gosub clear_arena
-end
-
 clear_arena: PROCEDURE
 	for accu=0 to 2
 		sprite accu,0
 	next accu
 
 	for accu=0 to 10
-		print at accu*20+20, "                    "
+		print at accu*20+20 color 7, "                    "
 	next accu
 end
 
@@ -46,11 +30,16 @@ init_main_loop: PROCEDURE
 	enemy_frame=0
 	
 	shot_on=0
-	
-	print at 16, "    "	
-	for accu=1 to lives
-		#backtab(19-accu)=$0801 + 2 * 8
-	next accu
+	gosub print_lives_left
+end
+
+print_lives_left: PROCEDURE
+	print at 16, "    "
+    if lives > 1 then	
+		for accu=1 to lives-1
+			#backtab(19-accu)=$0801 + 2 * 8
+		next accu
+	end if	
 end
 
 spawn_items: PROCEDURE
@@ -103,23 +92,15 @@ check_player_bg: PROCEDURE
 	end if
 end
 
-control_player: PROCEDURE
-	c = cont
-	if (d=$80)+(d=$40)+(d=$20) then
-		' keypad pressed
-	else
-		if (d=$60)+(d=$a0)+(d=$c0) then ' side button pressed
-		end if
-				
-		if cont1.up and player_y>MIN_Y then player_y=player_y-1
-		if cont1.down and player_y<MAX_Y then player_y=player_y+1
-		if cont1.left and player_x>MIN_X then player_x=player_x-1 
-		if cont1.right and player_x<MAX_X then player_x=player_x+1	
-		
-		if (cont1.up or cont1.down or cont1.left or cont1.right) and frame_cnt%4=0 then
-			player_frame=player_frame+1
-			if player_frame>2 then player_frame=0
-		end if
+control_player: PROCEDURE			
+	if cont1.up and player_y>MIN_Y then player_y=player_y-1
+	if cont1.down and player_y<MAX_Y then player_y=player_y+1
+	if cont1.left and player_x>MIN_X then player_x=player_x-1 
+	if cont1.right and player_x<MAX_X then player_x=player_x+1	
+	
+	if (cont1.up or cont1.down or cont1.left or cont1.right) and frame_cnt%4=0 then
+		player_frame=player_frame+1
+		if player_frame>2 then player_frame=0
 	end if
 end
 
@@ -247,6 +228,46 @@ player_dead: PROCEDURE
 	end if
 end
 
+next_level: PROCEDURE
+	gosub clear_arena
+	gosub print_game_data
+	gosub print_lives_left
+	if player_items>0 then 
+		print at 81, color 5, <3>player_items
+		print at 85, color 5, "ITEMS SNATCHED"
+	end if
+
+	player_items=0
+	level=level+1	
+	
+	print at 121 color 6, "STARTING LEVEL"
+	print at 136 color 6, <3>level
+	for accu=0 to 180
+		sound 0,rand(accu)*10,10
+		wait
+	next accu
+	gosub clear_arena
+end
+
+game_over: PROCEDURE
+	cls
+	print at 85 color 6, "GAME OVER"
+	print at 121 color 5, "FINAL SCORE"
+	print at 133 color 5,<6>#score
+
+	for accu=0 to 200:wait:next accu	
+end
+
+title_screen: PROCEDURE
+	cls
+	print at 66 color 6, "SNATCH"
+ 	print at 101 color 5, "(C)NOLTISOFT 2022"
+ 	print at 142 color 7, "BUTTON TO START"
+	
+	do 
+	loop until cont1.button>0
+end
+
 play_effects: PROCEDURE
 	on sound_effect gosub sound_none, sound_snatch, sound_shot, sound_bump
 end
@@ -264,10 +285,10 @@ sound_snatch: PROCEDURE
 end
 
 sound_shot: PROCEDURE
-	sound 0,2000,15-sound_explosion1/4
-	sound 4,sound_explosion1/2+4,$30
+	sound 0,2000,15
+	sound 4,sound_state,$30
 	sound_state=sound_state+1
-	if sound_state=30 then sound_effect=0:sound_state=0
+	if sound_state=10 then sound_effect=0:sound_state=0
 end
 
 sound_bump: PROCEDURE
