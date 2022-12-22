@@ -311,6 +311,11 @@ game_over: PROCEDURE
 	print at 85 color 6, "GAME OVER"
 	print at 121 color 5, "FINAL SCORE"
 	print at 133 color 5,<6>#score
+	
+	if #score>#high then
+		#high=#score
+		print at 162 color 2, "NEW HIGHSCORE!"
+	end if
 
 	for accu=0 to 200:wait:next accu	
 end
@@ -319,7 +324,9 @@ title_screen: PROCEDURE
 	cls
 	print at 66 color 6, "SNATCH"
  	print at 101 color 5, "(C)NOLTISOFT 2022"
- 	print at 142 color 7, "BUTTON TO START"
+	print at 142 color 2, "HIGHSCORE"
+	print at 152 color 2,<6>#high	
+ 	print at 182 color 7, "BUTTON TO START"
 	
 	do 
 	loop until cont1.button>0

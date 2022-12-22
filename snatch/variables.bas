@@ -5,6 +5,7 @@ sound_state=0
 accu=0
 
 ' Game state 
+#high=0
 #score=0
 level=0
 lives=3
