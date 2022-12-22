@@ -10,9 +10,6 @@ on frame gosub play_effects
 
 title_screen_loop:
 gosub title_screen
-
-init_game_loop:
-cls
 gosub init_game
 
 next_level_loop:

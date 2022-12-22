@@ -13,6 +13,7 @@ clear_arena: PROCEDURE
 end
 
 init_game: PROCEDURE
+	cls
 	#score=0
 	level=0
 	lives=3
