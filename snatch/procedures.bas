@@ -1,5 +1,5 @@
 print_game_data: PROCEDURE
-	print at 1 color 7,<6>#score
+	print at 1 color 6,<6>#score
 end
 
 clear_arena: PROCEDURE
@@ -16,6 +16,7 @@ init_game: PROCEDURE
 	#score=0
 	level=0
 	lives=3
+	shields=3
 	player_items=0
 end
 
@@ -23,6 +24,8 @@ init_main_loop: PROCEDURE
 	player_x=20
 	player_y=20
 	player_frame=0
+	player_shield_on=0
+	player_shield_cnt=0
 
 	enemy_x=random(50)+70
 	enemy_y=random(50)+30
@@ -32,6 +35,7 @@ init_main_loop: PROCEDURE
 	enemy_vertical=ENEMY_S
 	
 	shot_on=0
+	gosub print_shields_left
 	gosub print_lives_left
 end
 
@@ -39,7 +43,16 @@ print_lives_left: PROCEDURE
 	print at 16, "    "
     if lives > 1 then	
 		for accu=1 to lives-1
-			#backtab(19-accu)=$0801 + 2 * 8
+			#backtab(19-accu)=$0801+2*8
+		next accu
+	end if	
+end
+
+print_shields_left: PROCEDURE
+	print at 10, "    "
+    if shields > 0 then	
+		for accu=1 to shields
+			#backtab(13-accu)=$0807+14*8
 		next accu
 	end if	
 end
@@ -55,6 +68,16 @@ place_item:
 		end if
 	next accu
 	
+	if level%3=0 and shields<3 then
+place_shield:
+		player_items=random(220)+20
+		if #backtab(player_items)=BLANK then
+			#backtab(player_items)=SHIELD
+		else
+			goto place_shield
+		end if
+	end if
+		
 	player_items=0
 end
 
@@ -64,7 +87,10 @@ draw_sprites: PROCEDURE
 	end if
 	
 	sprite 2, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, $0802 + (3+enemy_frame) * 8
-	sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, $0801 + player_frame * 8
+	
+	accu=1
+	if player_shield_on then accu=7
+	sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, $0800 + accu + player_frame * 8
 	
 	frame_cnt=frame_cnt+1
 	if frame_cnt%10=0 then 
@@ -75,7 +101,13 @@ end
 
 check_collision: PROCEDURE
 	if col0 and $0006 then
-		game_state=GAME_STATE_DEAD
+		if player_shield_on=0 then
+			game_state=GAME_STATE_DEAD
+		else
+			shot_on=0
+			sprite 1,0
+			gosub sound_none
+		end if
 	end if
 end
 
@@ -90,7 +122,13 @@ check_player_bg: PROCEDURE
 		player_items=player_items+1
 		gosub sound_none
 		sound_effect=SOUND_EFFECT_SNATCH
-		if player_items=9+level then game_state=GAME_STATE_PROCEED		
+		if player_items=9+level then game_state=GAME_STATE_PROCEED
+    elseif #backtab(y*20+x-21)=SHIELD then
+		shields=shields+1
+		#backtab(y*20+x-21)=0
+		gosub print_shields_left
+		gosub sound_none
+		sound_effect=SOUND_EFFECT_SNATCH
 	end if
 end
 
@@ -103,6 +141,22 @@ control_player: PROCEDURE
 	if (cont1.up or cont1.down or cont1.left or cont1.right) and frame_cnt%4=0 then
 		player_frame=player_frame+1
 		if player_frame>2 then player_frame=0
+	end if
+	
+	if cont1.button and player_shield_on=0 and shields>0 then
+		sound_effect=SOUND_EFFECT_SHIELD
+		player_shield_cnt=200
+		player_shield_on=1
+		shields=shields-1
+		gosub print_shields_left
+	end if
+end
+
+manage_player_shield: PROCEDURE
+	if player_shield_cnt > 0 and player_shield_on>0 then
+		player_shield_cnt=player_shield_cnt-1
+	else
+		player_shield_on=0
 	end if
 end
 
@@ -234,6 +288,7 @@ next_level: PROCEDURE
 	gosub clear_arena
 	gosub print_game_data
 	gosub print_lives_left
+	gosub print_shields_left
 	if player_items>0 then 
 		print at 81 color 5, <3>player_items
 		print at 85 color 5, "ITEMS SNATCHED"
@@ -271,7 +326,7 @@ title_screen: PROCEDURE
 end
 
 play_effects: PROCEDURE
-	on sound_effect gosub sound_none, sound_snatch, sound_shot, sound_bump
+	on sound_effect gosub sound_none, sound_snatch, sound_shot, sound_bump, sound_shield
 end
 
 sound_none: PROCEDURE
@@ -299,5 +354,10 @@ sound_bump: PROCEDURE
 	if sound_state=5 then sound_effect=0:sound_state=0
 end
 
+sound_shield: PROCEDURE
+	sound 0,2000-sound_state*1/4,10
+	sound_state=sound_state+1
+	if sound_state=10 then sound_effect=0:sound_state=0
+end
 
 

@@ -3,7 +3,7 @@
 include "constants.bas"
 include "variables.bas"
 
-DEFINE 0,14,GAME_BITMAPS
+DEFINE 0,15,GAME_BITMAPS
 
 MODE 1
 on frame gosub play_effects
@@ -25,6 +25,7 @@ gosub init_main_loop
 while game_state = GAME_STATE_MAIN
 	gosub draw_sprites	
 	gosub control_player
+	gosub manage_player_shield
 	gosub move_enemy
 	gosub control_shot
 	gosub check_player_bg

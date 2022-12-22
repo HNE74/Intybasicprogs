@@ -126,4 +126,14 @@ GAME_BITMAPS:
  BITMAP "XXXXXX.."
  BITMAP "XXXXX..."
 
+ BITMAP ".XXXXXX." 
+ BITMAP ".X....X." 
+ BITMAP ".X.XXXX." 
+ BITMAP ".X....X."
+ BITMAP ".XXXX.X." 
+ BITMAP ".X....X." 
+ BITMAP ".XXXXXX." 
+ BITMAP "..XXXX.."
+
+
  

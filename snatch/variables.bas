@@ -8,12 +8,15 @@ accu=0
 #score=0
 level=0
 lives=3
+shields=3
 
 ' Player 
 player_x=20
 player_y=20
 player_frame=0
 player_items=0
+player_shield_on=0
+player_shield_cnt=0
 
 ' Enemy
 enemy_x=100
