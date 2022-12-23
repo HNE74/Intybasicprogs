@@ -26,6 +26,8 @@ enemy_speed=1
 enemy_frame=0
 enemy_horizontal=ENEMY_E
 enemy_vertical=ENEMY_S
+enemy_mode=ENEMY_MODE_BUMP
+#enemy_mode_cnt=ENEMY_MODE_MAXCNT
 
 ' Shot
 shot_on=0

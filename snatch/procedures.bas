@@ -34,6 +34,8 @@ init_main_loop: PROCEDURE
 	enemy_frame=0
 	enemy_horizontal=ENEMY_E
 	enemy_vertical=ENEMY_S
+	enemy_mode=ENEMY_MODE_BUMP
+	#enemy_mode_cnt=ENEMY_MODE_MAXCNT
 	
 	shot_on=0
 	gosub print_shields_left
@@ -94,14 +96,16 @@ end
 
 draw_sprites: PROCEDURE	
 	if shot_on>0 then
-		sprite 1, MOB_LEFT+shot_x, MOB_TOP+shot_y, $0800 + (frame_cnt%6) + shot_on * 8
+		sprite 1, MOB_LEFT+shot_x, MOB_TOP+shot_y, $0800+(frame_cnt%6)+shot_on*8
 	end if
 	
-	sprite 2, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, $0802 + (3+enemy_frame) * 8
+	accu=2
+	if enemy_mode=ENEMY_MODE_PURSUE then accu=4
+	sprite 2, MOB_LEFT+enemy_x, MOB_TOP+enemy_y, $0800+accu+(3+enemy_frame)*8
 	
 	accu=1
 	if player_shield_on then accu=7
-	sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, $0800 + accu + player_frame * 8
+	sprite 0, MOB_LEFT+player_x, MOB_TOP+player_y, $0800+accu+player_frame*8
 	
 	frame_cnt=frame_cnt+1
 	if frame_cnt%10=0 then 
@@ -178,6 +182,39 @@ manage_player_shield: PROCEDURE
 end
 
 move_enemy: PROCEDURE
+	if #enemy_mode_cnt>0 then
+		#enemy_mode_cnt=#enemy_mode_cnt-1
+		if #enemy_mode_cnt=0 then 
+			enemy_mode=ENEMY_MODE_PURSUE
+			for accu=0 to 5:sound 0,400,10:wait:next accu
+			for accu=0 to 5:sound 0,500,10:wait:next accu
+			for accu=0 to 5:sound 0,400,10:wait:next accu
+			for accu=0 to 5:sound 0,500,10:wait:next accu			
+		end if
+	end if
+	
+	if enemy_mode=ENEMY_MODE_BUMP then
+		gosub move_enemy_bump
+	else
+		gosub move_enemy_pursue
+	end if		
+end
+
+move_enemy_pursue: PROCEDURE
+	if enemy_x>player_x and frame_cnt%2=0 then
+		enemy_x=enemy_x-enemy_speed
+	elseif enemy_x<player_x and frame_cnt%2=0 	
+		enemy_x=enemy_x+enemy_speed		
+	end if
+	
+	if enemy_y>player_y and frame_cnt%2=0  then
+		enemy_y=enemy_y-enemy_speed
+	elseif enemy_y<player_y and frame_cnt%2=0 then	
+		enemy_y=enemy_y+enemy_speed		
+	end if	
+end
+
+move_enemy_bump: PROCEDURE
 	if enemy_horizontal=ENEMY_E and enemy_x+enemy_speed>MAX_X then
 		enemy_horizontal=ENEMY_W
 		if sound_effect<>SOUND_EFFECT_SHOT then
@@ -205,7 +242,7 @@ move_enemy: PROCEDURE
 			sound_effect=SOUND_EFFECT_BUMP
 		end if
 	end if
-
+	
 	if enemy_horizontal=ENEMY_E then 
 		enemy_x=enemy_x+enemy_speed
 	else
@@ -216,7 +253,7 @@ move_enemy: PROCEDURE
 		enemy_y=enemy_y+enemy_speed
 	else
 		enemy_y=enemy_y-enemy_speed	
-	end if		
+	end if	
 end
 
 control_shot: PROCEDURE
@@ -262,7 +299,7 @@ control_shot: PROCEDURE
 end
 
 move_shot: PROCEDURE		
-	if shot_x>MIN_X and shot_x<MAX_X and shot_y>MIN_Y and shot_y<MAX_Y then
+	if shot_x>MIN_X-8 and shot_x<MAX_X+8 and shot_y>MIN_Y-8 and shot_y<MAX_Y+8 then
 		if shot_dir=SHOT_N then 
 			shot_y=shot_y-SHOT_SPEED
 		elseif shot_dir=SHOT_S then 
